@@ -10,7 +10,7 @@ if($_SERVER['SERVER_NAME'] == 'localhost')
 	define('DBPASS', '');
 	define('DBDRIVER', '');
 	
-	define('ROOT', 'http://localhost/dallas/public');
+	define('ROOT', 'http://localhost/Web Assignment/public');
 
 }else
 {

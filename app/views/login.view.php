@@ -11,7 +11,7 @@
 
 
   <!-- Bootstrap core CSS -->
-  <link href="<?= ROOT ?>/assets/css/bootstrap.min.css" rel="stylesheet">
+  <link href="<?= ROOT ?>/assets/css/frameworks/bootstrap.min.css" rel="stylesheet">
 
   <style>
     .bd-placeholder-img {
@@ -31,7 +31,7 @@
 
 
   <!-- Custom styles for this template -->
-  <link href="<?= ROOT ?>/assets/css/signin.css" rel="stylesheet">
+  <link href="<?= ROOT ?>/assets/css/pages/signin.css" rel="stylesheet">
 </head>
 
 <body class="text-center">
@@ -64,7 +64,7 @@
       <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
       <a href="<?= ROOT ?>">Home</a>
       <a href="<?= ROOT ?>/signup">Signup</a>
-      <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
+      <p class="mt-5 mb-3 text-muted">&copy; 2017-2021</p>
     </form>
   </main>
 

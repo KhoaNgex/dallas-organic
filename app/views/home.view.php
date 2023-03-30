@@ -14,13 +14,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
 
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/frameworks/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/font-awesome.min.css" type="text/css">
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/elegant-icons.css" type="text/css">
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/nice-select.css" type="text/css">
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/jquery-ui.min.css" type="text/css">
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/owl.carousel.min.css" type="text/css">
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/frameworks/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/frameworks/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/frameworks/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/frameworks/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/frameworks/slicknav.min.css" type="text/css">
     
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/main.css" type="text/css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/components/header.css" type="text/css">
@@ -114,13 +114,13 @@
     ?>
 
     <!-- Js Plugins -->
-    <script src="<?= ROOT ?>/assets/js/jquery-3.3.1.min.js"></script>
-    <script src="<?= ROOT ?>/assets/js/bootstrap.min.js"></script>
-    <script src="<?= ROOT ?>/assets/js/jquery.nice-select.min.js"></script>
-    <script src="<?= ROOT ?>/assets/js/jquery-ui.min.js"></script>
-    <script src="<?= ROOT ?>/assets/js/jquery.slicknav.js"></script>
-    <script src="<?= ROOT ?>/assets/js/mixitup.min.js"></script>
-    <script src="<?= ROOT ?>/assets/js/owl.carousel.min.js"></script>
+    <script src="<?= ROOT ?>/assets/js/frameworks/jquery-3.3.1.min.js"></script>
+    <script src="<?= ROOT ?>/assets/js/frameworks/bootstrap.min.js"></script>
+    <script src="<?= ROOT ?>/assets/js/frameworks/jquery.nice-select.min.js"></script>
+    <script src="<?= ROOT ?>/assets/js/frameworks/jquery-ui.min.js"></script>
+    <script src="<?= ROOT ?>/assets/js/frameworks/jquery.slicknav.js"></script>
+    <script src="<?= ROOT ?>/assets/js/frameworks/mixitup.min.js"></script>
+    <script src="<?= ROOT ?>/assets/js/frameworks/owl.carousel.min.js"></script>
     <script src="<?= ROOT ?>/assets/js/main.js"></script>
 </body>
 
