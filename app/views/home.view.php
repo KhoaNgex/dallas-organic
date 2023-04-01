@@ -115,13 +115,13 @@
     ?>
 
     <!-- Js Plugins -->
-    <script src="<?= ROOT ?>/assets/js/frameworks/jquery-3.3.1.min.js"></script>
-    <script src="<?= ROOT ?>/assets/js/frameworks/bootstrap.min.js"></script>
-    <script src="<?= ROOT ?>/assets/js/frameworks/jquery.nice-select.min.js"></script>
-    <script src="<?= ROOT ?>/assets/js/frameworks/jquery-ui.min.js"></script>
-    <script src="<?= ROOT ?>/assets/js/frameworks/jquery.slicknav.js"></script>
-    <script src="<?= ROOT ?>/assets/js/frameworks/mixitup.min.js"></script>
-    <script src="<?= ROOT ?>/assets/js/frameworks/owl.carousel.min.js"></script>
+    <script src="<?= ROOT ?>/assets/js/plugins/jquery-3.3.1.min.js"></script>
+    <script src="<?= ROOT ?>/assets/js/plugins/bootstrap.min.js"></script>
+    <script src="<?= ROOT ?>/assets/js/plugins/jquery.nice-select.min.js"></script>
+    <script src="<?= ROOT ?>/assets/js/plugins/jquery-ui.min.js"></script>
+    <script src="<?= ROOT ?>/assets/js/plugins/jquery.slicknav.js"></script>
+    <script src="<?= ROOT ?>/assets/js/plugins/mixitup.min.js"></script>
+    <script src="<?= ROOT ?>/assets/js/plugins/owl.carousel.min.js"></script>
     <script src="<?= ROOT ?>/assets/js/main.js"></script>
 </body>
 
