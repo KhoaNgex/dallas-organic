@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/main.css" type="text/css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/components/header.css" type="text/css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/components/footer.css" type="text/css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/components/productCard.css" type="text/css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/pages/home.css" type="text/css">
 </head>
 
