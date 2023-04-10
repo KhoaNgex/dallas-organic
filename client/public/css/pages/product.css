@@ -1,0 +1,238 @@
+.breadcrumb-container {
+  height: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url("../../images/breadcrumb.jpg");
+}
+
+.breadcrumb__page-title {
+  text-transform: uppercase;
+  color: #fff;
+  font-size: 4rem;
+  font-weight: 700;
+}
+
+.breadcrumb__page-subtitle {
+  text-transform: uppercase;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.breadcrumb__subtitle-group {
+  margin-bottom: 10px;
+}
+
+.breadcrumb__subtitle-link {
+  color: #fff;
+}
+
+.breadcrumb__subtitle-link:hover {
+  color: #a8df5c;
+}
+
+.breadcrumb__page-subtitle--main {
+  color: #c2ff6d;
+  font-weight: 800;
+}
+
+.product-list {
+  margin-top: 75px;
+}
+
+.product-category li {
+  display: inline-block;
+  font-weight: 400;
+  font-size: 16px;
+  margin-bottom: 28px;
+}
+.product-category li a {
+  color: #82ae46;
+  padding: 5px 20px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.product-category li a.active {
+  background: #82ae46;
+  color: #fff;
+}
+
+.product {
+  display: block;
+  width: 100%;
+  margin-bottom: 30px;
+  position: relative;
+  border: 1px solid #f0f0f0;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.3s ease-in-out;
+}
+.product:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.product-img {
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+.product-img__fluid {
+  display: block;
+  max-width: 100%;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  transition: transform 0.2s;
+  height: auto;
+}
+
+.product-img__fluid:hover {
+  transform: scale(1.5);
+}
+
+.product-info {
+  padding: 30px;
+  text-align: center;
+}
+
+.product-name-container {
+  min-height: 75px;
+}
+
+.product-name {
+  color: #111;
+  font-weight: 500;
+}
+
+.product-name:hover {
+  color: #111;
+}
+
+.product-price {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #82ae46;
+}
+
+.product-sort-engine {
+  padding: 0px 20px;
+}
+
+.product-sort-engine__direction {
+  margin-bottom: 15px;
+}
+
+.product-sort-engine__btn {
+  width: 100%;
+  border: none;
+  margin-bottom: 25px;
+}
+
+input[type="radio"] {
+  /* remove standard background appearance */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* create custom radiobutton appearance */
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  padding: 2px;
+  margin-right: 10px;
+  /* background-color only for content */
+  background-clip: content-box;
+  border: 1px solid #c4ceb4;
+  background-color: #e7e6e7;
+  border-radius: 50%;
+}
+
+/* appearance for checked radiobutton */
+input[type="radio"]:checked {
+  background-color: #93e026;
+}
+
+.hidden {
+  display: none;
+}
+
+.pagination-container {
+  width: calc(100% - 2rem);
+  display: flex;
+  align-items: center;
+  bottom: 0;
+  padding: 1rem 0;
+  justify-content: center;
+}
+
+#paginated-list {
+  list-style-type: none;
+}
+
+.pagination-number,
+.pagination-button {
+  font-size: 1.1rem;
+  background-color: transparent;
+  border: none;
+  margin: 0.25rem 0.25rem;
+  cursor: pointer;
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: 0.2rem;
+}
+
+.pagination-number:hover,
+.pagination-button:not(.disabled):hover {
+  background: #fff;
+}
+
+.pagination-number.active {
+  color: #fff;
+  background: #82ae46;
+}
+
+@media only screen and (min-width: 320px) {
+  .current-products {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+@media only screen and (min-width: 480px) {
+  .current-products {
+    padding-left: 10px;
+    padding-right: 20px;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .product-name {
+    font-size: 15px;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .product-info {
+    padding: 20px;
+    padding-bottom: 0px;
+  }
+  .product-price {
+    margin-top: 10px;
+  }
+  .product-sort-engine {
+    padding: 0px 0px 0px 25px;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .current-products {
+    padding-left: 10px;
+    padding-right: 40px;
+  }
+}
