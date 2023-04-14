@@ -37,7 +37,11 @@
     include("components/header.php");
     ?>
 
-    
+    <div class = "shop">
+        <div class = "container" id = "shop-body">
+            
+        </div>
+    </div>
 
     <?php
     include("components/footer.php");
@@ -52,6 +56,7 @@
     <script src="<?= ROOT ?>/assets/js/plugins/mixitup.min.js"></script>
     <script src="<?= ROOT ?>/assets/js/plugins/owl.carousel.min.js"></script>
     <script src="<?= ROOT ?>/assets/js/main.js"></script>
+    <script src="<?= ROOT ?>/assets/js/shop.js"></script>
 </body>
 
 </html>
