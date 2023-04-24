@@ -59,16 +59,16 @@
         <table class="w-100">
           <tr>
             <td class="col-4">Họ và tên:</td>
-            <td class="col"><input type="text" class="form-control" id="fullname" name="fullname"></td>
+            <td class="col"><input type="text" class="form-control" id="fullname" name="fullname" value="<?php if (isset($_POST["sign_up"])) echo isset($_POST['fullname']) ? $_POST['fullname'] : ''; ?>"></td>
           </tr>
           <tr>
             <td class="col-4">Tên đăng nhập:</td>
-            <td class="col"><input type="text" class="form-control" id="username" name="username"></td>
+            <td class="col"><input type="text" class="form-control" id="username" name="username" value="<?php if (isset($_POST["sign_up"])) echo isset($_POST['username']) ? $_POST['username'] : ''; ?>"></td>
           </tr>
           <tr>
             <td class="col-4">Mật khẩu:</td>
             <td class="col position-relative">
-              <input type="password" class="form-control" id="password" name="password">
+              <input type="password" class="form-control" id="password" name="password" value="<?php if (isset($_POST["sign_up"])) echo isset($_POST['password']) ? $_POST['password'] : ''; ?>">
               <span class="position-absolute top-0 end-0 pe-3 pt-1" id="togglePassword" style="cursor: pointer;">
                 <i class="fa fa-eye"></i>
               </span>
@@ -88,7 +88,7 @@
           <tr>
             <td class="col-4">Xác nhận mật khẩu:</td>
             <td class="col position-relative">
-              <input type="password" class="form-control" id="confirm-password" name="confirm-password">
+              <input type="password" class="form-control" id="confirm-password" name="confirm-password" value="<?php if (isset($_POST["sign_up"])) echo isset($_POST['confirm-password']) ? $_POST['confirm-password'] : ''; ?>">
               <span class="position-absolute top-0 end-0 pe-3 pt-1" id="toggle_Password" style="cursor: pointer;">
                 <i class="fa fa-eye"></i>
               </span>
@@ -108,8 +108,8 @@
           <tr>
             <td class="col-4">Giới tính:</td>
             <td class="col">
-              <input type="radio" value="Male" name="gender"> Nam
-              <input type="radio" value="Female" name="gender"> Nữ
+              <input type="radio" value="Male" name="gender" <?php if (isset($_POST["sign_up"])) echo isset($_POST['gender']) && $_POST['gender'] == 'Male' ? 'checked' : ''; ?>> Nam
+              <input type="radio" value="Female" name="gender" <?php if (isset($_POST["sign_up"])) echo isset($_POST['gender']) && $_POST['gender'] == 'Female' ? 'checked' : ''; ?>> Nữ
             </td>
           </tr>
           <tr>
@@ -155,15 +155,15 @@
           </tr>
           <tr>
             <td class="col-4">Email:</td>
-            <td class="col"><input type="email" class="form-control" id="email" name="email"></td>
+            <td class="col"><input type="email" class="form-control" id="email" name="email" value="<?php if (isset($_POST["sign_up"])) echo isset($_POST['email']) ? $_POST['email'] : ''; ?>"></td>
           </tr>
           <tr>
             <td class="col-4">Địa chỉ:</td>
-            <td class="col"><input type="text" class="form-control" id="address" name="address"></td>
+            <td class="col"><input type="text" class="form-control" id="address" name="address" value="<?php if (isset($_POST["sign_up"])) echo isset($_POST['address']) ? $_POST['address'] : ''; ?>"></td>
           </tr>
           <tr>
             <td class="col-4">SĐT:</td>
-            <td class="col"><input type="text" class="form-control" id="phone-number" name="phone-number"></td>
+            <td class="col"><input type="text" class="form-control" id="phone-number" name="phone-number" value="<?php if (isset($_POST["sign_up"])) echo isset($_POST['phone-number']) ? $_POST['phone-number'] : ''; ?>"></td>
           </tr>
         </table>
         <div class="checkbox mb-3 text-center">
@@ -172,7 +172,7 @@
           </label>
         </div>
         <div class="text-center">
-          <button class="w-50 btn btn-lg btn-success mb-4 text-center" type="submit">Đăng kí</button>
+          <button class="w-50 btn btn-lg btn-success mb-4 text-center" type="submit" name="sign_up">Đăng kí</button>
         </div>
         <div class="sign_up text-center">
           Bạn đã có tài khoản? Đăng nhập
