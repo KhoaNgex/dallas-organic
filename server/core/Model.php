@@ -2,9 +2,6 @@
 Trait Model
 {
 	use Database;
-
-	protected $limit 		= 8;
-	protected $offset 		= 0;
 	protected $order_type 	= "asc";
 	protected $order_column = "id";
 	public $errors 		= [];
@@ -13,7 +10,7 @@ Trait Model
 	public function findAll()
 	{
 	 
-		$query = "select * from $this->table order by $this->order_column $this->order_type limit $this->limit offset $this->offset";
+		$query = "select * from $this->table order by $this->order_column $this->order_type";
 
 		return $this->query($query); 
 	}
@@ -35,7 +32,7 @@ Trait Model
 		
 		$query = trim($query," && ");
 
-		$query .= " order by $this->order_column $this->order_type limit $this->limit offset $this->offset";
+		$query .= " order by $this->order_column $this->order_type";
 		$data = array_merge($data, $data_not);
 
 		return $this->query($query, $data);
@@ -58,7 +55,6 @@ Trait Model
 		
 		$query = trim($query," && ");
 
-		$query .= " limit $this->limit offset $this->offset";
 		$data = array_merge($data, $data_not);
 		
 		$result = $this->query($query, $data);

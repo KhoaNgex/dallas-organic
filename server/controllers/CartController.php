@@ -3,7 +3,7 @@ class CartController
 {
     use Controller;
     protected $model = 'Cart';
-
+ 
     public function index($action, $id = -1, $data = [])
     {
         $this->data_obj = new $this->model;

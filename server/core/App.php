@@ -29,8 +29,12 @@ class App
 		}
 
 		$controller = new $this->controller;
+		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+			$controller->index($component_action, $component_id, $_POST);
+		} else {
+			$controller->index($component_action, $component_id, $_GET);
+		}
 
-		$controller->index($component_action, $component_id, $_POST);
 	}
 
 }

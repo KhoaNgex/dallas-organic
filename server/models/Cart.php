@@ -3,7 +3,7 @@
 class Cart
 {
 
-	use Model;
+	use Model; 
 
 	protected $table = 'cart';
 

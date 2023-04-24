@@ -22,7 +22,7 @@ class Feedback
 
 	public function findAvgRating($product_id)
 	{
-		$query = "select calculate_average_rating($product_id);";
+		$query = "select calculate_average_rating($product_id) as avg_rating;";
 		return $this->query($query);
 	}
 

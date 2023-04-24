@@ -14,25 +14,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
 
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/resources/bootstrap.min.css" type="text/css">
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/font-awesome.min.css" type="text/css">
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/resources/elegant-icons.css" type="text/css">
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/resources/nice-select.css" type="text/css">
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/resources/jquery-ui.min.css" type="text/css">
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/resources/owl.carousel.min.css" type="text/css">
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/resources/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="../../public/css/resources/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="../../public/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="../../public/css/resources/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="../../public/css/resources/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="../../public/css/resources/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="../../public/css/resources/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="../../public/css/resources/slicknav.min.css" type="text/css">
 
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/main.css?v=1" type="text/css">
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/components/header.css" type="text/css">
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/components/footer.css" type="text/css">
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/pages/home.css?v=1" type="text/css">
+    <link rel="stylesheet" href="../../public/css/main.css" type="text/css">
+    <link rel="stylesheet" href="../../public/css/components/header.css" type="text/css">
+    <link rel="stylesheet" href="../../public/css/components/footer.css" type="text/css">
+    <link rel="stylesheet" href="../../public/css/pages/home.css" type="text/css">
+    <script src="../../public/js/main.js"></script>
 </head>
 
 <body>
     <?php
-    include("components/preload.php");
-    include("components/humberger.php");
-    include("components/header.php");
+    include("../components/preload.php");
+    include("../components/humberger.php");
+    include("../components/header.php");
     ?>
 
     <section class="hero">
@@ -45,15 +46,15 @@
                             <span>Danh mục</span>
                         </div>
                         <ul>
-                            <?php
+                            <!-- <?php
                             if (!empty($category_list)) {
                                 foreach ($category_list as $category) {
                                     echo '<li><a href="#">' . $category->cate_name . '</a></li>';
                                 }
                             }
-                            ?>
+                            ?> -->
                         </ul>
-                    </div> 
+                    </div>
                     <div class="hero__search__phone">
                         <div class="hero__search__phone__icon">
                             <i class="fa fa-phone"></i>
@@ -73,8 +74,7 @@
 
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <div class="hero__item set-bg"
-                                    data-setbg="assets/images/slide-home-1.jpg">
+                                <div class="hero__item set-bg" data-setbg="../../public/images/slide-home-1.jpg">
                                     <div class="hero__text">
                                         <span>TRÁI CÂY SẠCH</span>
                                         <h2>Tươi ngon <br />100% Organic</h2>
@@ -84,8 +84,7 @@
                                 </div>
                             </div>
                             <div class="carousel-item">
-                                <div class="hero__item set-bg"
-                                    data-setbg="assets/images/slide-home-2.jpg">
+                                <div class="hero__item set-bg" data-setbg="../../public/images/slide-home-2.jpg">
                                     <div class="hero__text">
                                         <span>VƯỜN RAU HỮU CƠ</span>
                                         <h2>Xanh sạch<br />100% Nature</h2>
@@ -109,18 +108,16 @@
     </section>
 
     <?php
-    include("components/footer.php");
+    include("../components/footer.php");
     ?>
 
-    <!-- Js Plugins -->
-    <script src="<?= ROOT ?>/assets/js/plugin/jquery-3.3.1.min.js"></script>
-    <script src="<?= ROOT ?>/assets/js/plugin/bootstrap.min.js"></script>
-    <script src="<?= ROOT ?>/assets/js/plugin/jquery.nice-select.min.js"></script>
-    <script src="<?= ROOT ?>/assets/js/plugin/jquery-ui.min.js"></script>
-    <script src="<?= ROOT ?>/assets/js/plugin/jquery.slicknav.js"></script>
-    <script src="<?= ROOT ?>/assets/js/plugin/mixitup.min.js"></script>
-    <script src="<?= ROOT ?>/assets/js/plugin/owl.carousel.min.js"></script>
-    <script src="<?= ROOT ?>/assets/js/main.js"></script>
+    <script src="../../public/js/plugin/jquery-3.3.1.min.js"></script>
+    <script src="../../public/js/plugin/bootstrap.min.js"></script>
+    <script src="../../public/js/plugin/jquery.nice-select.min.js"></script>
+    <script src="../../public/js/plugin/jquery-ui.min.js"></script>
+    <script src="../../public/js/plugin/jquery.slicknav.js"></script>
+    <script src="../../public/js/plugin/mixitup.min.js"></script>
+    <script src="../../public/js/plugin/owl.carousel.min.js"></script>
 </body>
 
 </html>

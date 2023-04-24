@@ -142,9 +142,9 @@ ol {
   border: none;
 }
 
-/* Preloder */
+/* Preloader */
 
-#preloder {
+#preloader {
   position: fixed;
   width: 100%;
   height: 100%;

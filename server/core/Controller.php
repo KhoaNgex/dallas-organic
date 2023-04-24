@@ -2,7 +2,7 @@
 trait Controller
 {
 	private $data_obj;
-
+ 
 	public function index($action, $id = -1, $data = [])
 	{
 		$this->data_obj = new $this->model;
@@ -14,7 +14,7 @@ trait Controller
 				$this->getItem($id);
 				break;
 			case 'createItem':
-				$this->createItem($data);
+				$this->createItem($data); 
 				break;
 			case 'editItem':
 				$this->editItem($id, $data);
