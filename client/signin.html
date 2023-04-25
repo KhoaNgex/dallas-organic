@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Dallas Organic</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <link rel="icon" type="image/jpeg" href="img/favicon.jpeg" sizes="96x96">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="css/style.css" rel="stylesheet">
+
+    <style>
+        .auth-container {
+            background-image: url(img/farmland.jpg);
+        }
+
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        .home>a {
+            font-size: 30px;
+            -webkit-font-smoothing: antialiased;
+            font-family: "Nunito", sans-serif;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+
+            .home>a {
+                font-size: 40px;
+                -webkit-font-smoothing: antialiased;
+                font-family: "Nunito", sans-serif;
+                text-decoration: none;
+                font-weight: 600;
+            }
+        }
+    </style>
+
+    <link href="css/signin.css" rel="stylesheet">
+</head>
+
+<body class="text-center auth-container">
+
+    <main class="form-signin">
+        <form method="post">
+            <div class="home mb-2">
+                <a class="text-primary">DALLAS Organic</a>
+            </div>
+
+            <h3 class="mb-3 fw-normal">Đăng nhập</h3>
+
+            <div class="form-floating mb-2">
+                <input name="username" type="text" class="form-control" id="floatingInput" placeholder="Tên đăng nhập">
+                <label for="floatingInput">Tên đăng nhập</label>
+            </div>
+            <div class="form-floating position-relative mb-4">
+                <input name="password" type="password" class="form-control" id="floatingPassword"
+                    placeholder="Mật khẩu">
+                <label for="floatingPassword">Mật khẩu</label>
+                <span class="position-absolute end-0 pe-3" style="top: 18px;" id="togglePassword"
+                    style="cursor: pointer;">
+                    <i class="fa fa-eye"></i>
+                </span>
+            </div>
+
+            <button class="w-100 btn btn-lg btn-primary mb-3" type="submit">Đăng nhập</button>
+            <div class="sign_up">
+                Bạn chưa có tài khoản? Đăng kí
+                <a href="signup.html" class="text-success">tại đây</a>
+            </div>
+            <div class="mt-1">
+                Trở lại trang chủ
+                <a href="index.html" class="text-success">tại đây</a>
+            </div>
+            <script>
+                const passwordInput = document.querySelector('#floatingPassword');
+                const togglePassword = document.querySelector('#togglePassword');
+                togglePassword.addEventListener('click', function () {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    togglePassword.querySelector('i').classList.toggle('fa-eye');
+                    togglePassword.querySelector('i').classList.toggle('fa-eye-slash');
+                    document.getElementById("floatingPassword").focus();
+                });
+            </script>
+        </form>
+    </main>
+</body>
+
+</html>
