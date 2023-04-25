@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1:3307
--- Thời gian đã tạo: Th4 10, 2023 lúc 04:54 AM
+-- Thời gian đã tạo: Th4 25, 2023 lúc 07:19 AM
 -- Phiên bản máy phục vụ: 10.4.27-MariaDB
 -- Phiên bản PHP: 8.2.0
 
@@ -30,6 +30,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `createOrder` (IN `recieve_address` 
    VALUES (recieve_address, recieve_phonenum, note, order_date, order_status, ship_fee, userID_ordcus);
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllBlogTitle` (IN `p_offset` INT)   BEGIN 
+    DECLARE off_set INT DEFAULT 0;
+	SET off_set = p_offset*9; 
+    SELECT id, title, created_by, created_at, image
+	FROM blogs
+	ORDER BY created_at DESC
+    LIMIT 9
+    OFFSET off_set;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllFeedback` ()   BEGIN
     SELECT fullname, username, product_name, feedback.comment, rating, feedback_datetime		
 	FROM feedback
@@ -44,11 +54,79 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllProductInCart` (IN `user_id` 
     WHERE cart.userID = user_id;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllProductTitle` (IN `p_offset` INT, IN `sort_order` VARCHAR(5), IN `sort_field` VARCHAR(10), IN `p_price` INT, IN `p_cate` INT, IN `p_name` VARCHAR(50))   BEGIN 
+	DECLARE off_set int;
+    declare price_pattern text;
+    declare cate_pattern text;
+    declare name_pattern text;
+    set off_set = p_offset*6;
+    
+    IF p_name = '' THEN
+		set name_pattern = CONCAT('product_name LIKE ',"'%'");
+	ELSE 
+		set name_pattern = CONCAT('product_name LIKE',"'%",p_name,"%'");
+	END IF;
+    
+    IF p_cate = -1 THEN
+		set cate_pattern = CONCAT('category_id LIKE ',"'%'");
+	ELSE 
+		set cate_pattern = CONCAT('category_id=',p_cate);
+	END IF;
+    
+    IF p_price = -1 THEN
+		set price_pattern = CONCAT('price LIKE ',"'%'");
+	END IF;
+        
+    IF (p_price >= 0 && p_price < 200000) THEN
+		set price_pattern = CONCAT('price>=',
+		p_price,
+		' AND price<=',
+		p_price+50000);
+	END IF;
+    
+	IF (p_price >= 200000) THEN
+		set price_pattern = CONCAT('price>=',
+		p_price);
+    END IF;
+    
+	SET @t1 =CONCAT(' SELECT id, product_name, price, image, sold_number
+	FROM products WHERE ',
+	price_pattern,
+    ' AND ',
+    cate_pattern,
+    ' AND ',
+    name_pattern,
+	' ORDER BY ', 
+	sort_field, 
+	' ', 
+	sort_order,
+	' ',
+	'LIMIT 6 OFFSET ',
+	off_set);
+	PREPARE stmt FROM @t1;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getBestSellers` ()   BEGIN
+    SELECT id, product_name, price, image
+	FROM products
+	ORDER BY sold_number DESC
+	LIMIT 8;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getProductFeedback` (IN `product_id` INT(11))   BEGIN
-    SELECT productID, fullname, avatar, username, feedback.comment, rating, feedback_datetime	
+    SELECT fullname, avatar, username, feedback.comment, rating, feedback_datetime	
 	FROM feedback
 	INNER JOIN user_account ON feedback.customerID=user_account.id
     WHERE productID = product_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getSomeBlogTitle` ()   BEGIN
+    SELECT id, title, created_by, created_at, image
+	FROM blogs
+	ORDER BY created_at DESC
+	LIMIT 3;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `placeOrder` (IN `recieve_address` VARCHAR(200), IN `recieve_phonenum` INT(11), IN `note` VARCHAR(200), IN `order_date` DATE, IN `order_status` VARCHAR(30), IN `ship_fee` INT(11), IN `userID_ordcus` INT(11))   BEGIN
@@ -129,6 +207,14 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `check_cart_and_update_product` (`use
   -- Close cursor and return true
   CLOSE cart_cursor;
   RETURN TRUE;
+END$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `count_products` () RETURNS INT(11)  BEGIN
+  DECLARE _count INT;
+  
+  SELECT COUNT(*) INTO _count FROM products;
+  
+  RETURN _count;
 END$$
 
 CREATE DEFINER=`root`@`localhost` FUNCTION `insertNewOrders` (`user_id` INT(11), `order_id` INT(11)) RETURNS INT(11)  BEGIN
@@ -242,6 +328,32 @@ INSERT INTO `bank_account` (`bank_name`, `acc_number`, `customerID`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Cấu trúc bảng cho bảng `blogs`
+--
+
+CREATE TABLE `blogs` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `subtitle` text DEFAULT NULL,
+  `created_by` varchar(50) DEFAULT 'Admin',
+  `min_read` int(11) DEFAULT NULL,
+  `content` longtext NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `image` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `blogs`
+--
+
+INSERT INTO `blogs` (`id`, `title`, `subtitle`, `created_by`, `min_read`, `content`, `created_at`, `image`) VALUES
+(1, '5 Healthy Lifestyle Tips to Improve Your Overall Health', 'Reduce your tiredness and boost your health with these simple changes', 'Admin', 2, '<div style=\"display: flex; justify-content: center;\">\r\n                        <img src=\"https://imgeng.jagran.com/images/2023/mar/healthy-lifestyle-changes-for-weight-loss1677901066822.jpg\"\r\n                            alt=\"Healthy food\" class=\"img-fluid mt-2\">\r\n                    </div>\r\n                    <p class=\"mt-4\">Living a healthy lifestyle is important for maintaining a strong body and mind. Here are 5 tips\r\n                        to help you improve your overall health:</p>\r\n                    <ol>\r\n                        <li>Get enough sleep: Aim for 7-9 hours of sleep every night to give your body time to rest and\r\n                            recharge.</li>\r\n                        <li>Eat a balanced diet: Focus on eating whole foods such as fruits, vegetables, whole grains,\r\n                            and lean proteins. Avoid processed foods, sugary drinks, and excessive amounts of alcohol.\r\n                        </li>\r\n                        <li>Stay active: Exercise regularly to maintain a healthy weight, build muscle, and reduce the\r\n                            risk of chronic diseases such as heart disease and diabetes.</li>\r\n                        <li>Reduce stress: Find ways to relax and manage stress levels, such as practicing yoga,\r\n                            meditation, or deep breathing exercises.</li>\r\n                        <li>Stay hydrated: Drink plenty of water throughout the day to keep your body hydrated and\r\n                            functioning properly.</li>\r\n                    </ol>\r\n                    <p>By following these healthy lifestyle tips, you can improve your overall health and well-being.\r\n                        Remember, small\r\n                        changes can make a big difference!</p>', '2023-04-23 08:56:33', 'https://imgeng.jagran.com/images/2023/mar/healthy-lifestyle-changes-for-weight-loss1677901066822.jpg'),
+(2, 'Thực Phẩm Hữu Cơ - Sự Lựa Chọn Sức Khỏe', 'Tại Sao Bạn Nên Cân Nhắc Ăn Thực Phẩm Hữu Cơ', 'Admin', 2, '<p>Thực phẩm hữu cơ đã trở nên ngày càng phổ biến trong những năm gần đây, khi mọi người đang ngày càng nhận\r\n            thức được những lợi ích của việc ăn thực phẩm hữu cơ. Nhưng thực phẩm hữu cơ là gì chính xác?</p>\r\n        <div style=\"display: flex; justify-content: center;\">\r\n            <img src=\"https://i.ndtvimg.com/i/2015-05/organic_625x350_41430972446.jpg\"\r\n                alt=\"Healthy food\" class=\"img-fluid mt-3 mb-4\">\r\n        </div>\r\n        <p>Thực phẩm hữu cơ được trồng trọt và chế biến mà không sử dụng các hóa chất tổng hợp, chẳng hạn như thuốc trừ\r\n            sâu\r\n            và phân bón hóa học. Thay vào đó, những người trồng trọt hữu cơ sử dụng các phương pháp tự nhiên để kiểm\r\n            soát\r\n            sâu bệnh và cải thiện tính mùn bãi của đất, chẳng hạn như luân canh, phân bón hữu cơ và các động vật ăn côn\r\n            trùng tự nhiên. Có nhiều lý do vì sao bạn nên cân nhắc ăn thực phẩm hữu cơ. Trước hết, nó tốt hơn cho môi\r\n            trường. Bằng cách\r\n            tránh\r\n            sử dụng các hóa chất tổng hợp, những người trồng trọt hữu cơ đang giảm tác động của mình lên môi trường và\r\n            giúp\r\n            bảo vệ đa dạng sinh học. Thứ hai, thực phẩm hữu cơ tốt hơn cho sức khỏe của bạn. Nghiên cứu đã chứng minh\r\n            rằng thực phẩm hữu cơ thường\r\n            giàu chất dinh dưỡng hơn, chẳng hạn như vitamin và chất chống oxy hóa. Trong khi đó, các chất độc hại và\r\n            thuốc trừ sâu được sử dụng trong trồng trọt thông thường có thể gây hại cho\r\n            sức\r\n            khỏe của bạn. Những chất này có thể tích tụ trong cơ thể của bạn qua thực phẩm, gây ra các vấn đề sức khỏe\r\n            như ung\r\n            thư, rối loạn nội tiết và hư hại hệ thống miễn dịch.</p>\r\n        <p>Vì vậy, nếu bạn quan tâm đến sức khỏe của mình và muốn ăn những thực phẩm tốt cho sức khỏe và môi trường, hãy\r\n            cân\r\n            nhắc sử dụng thực phẩm hữu cơ. Hãy tìm kiếm các sản phẩm hữu cơ tại cửa hàng thực phẩm hữu cơ hoặc các chợ\r\n            nông sản\r\n            địa phương, và hãy ủng hộ các nông dân và nhà sản xuất hữu cơ địa phương của bạn.</p>', '2023-04-23 08:56:33', 'https://i.ndtvimg.com/i/2015-05/organic_625x350_41430972446.jpg'),
+(3, 'Lợi ích tuyệt vời của cà chua', 'Tại sao bạn nên ăn cà chua mỗi ngày?', 'Admin', 5, '<p>Cà chua được mệnh danh là một nhà máy dinh dưỡng vì nó cung cấp rất nhiều thành phần có lợi cho\r\n            sức khỏe,\r\n            ngay lập tức hãy cho cà chua vào thực đơn ăn uống của mình bạn nhé!</p>\r\n        <p>Cà chua rất giàu vitamin A, C, K, vitamin B6, kali, folate, thiamin, magiê, niacin, đồng và phốt pho, là\r\n            những vi chất\r\n            cần thiết để duy trì một sức khỏe tốt. Điều tuyệt vời hơn ở cà chua là chúng chứa rất ít\r\n            cholesterol, chất béo\r\n            bão hòa, natri và calo. Bạn có thể ăn cà chua sống kẹp với bánh mì, làm salad, nước sốt, sinh tố, thậm\r\n            chí nấu\r\n            súp. Sau đây là 9 lợi ích của cà chua.</p>\r\n        <div style=\"display: flex; justify-content: center;\">\r\n            <img src=\"https://vfa.gov.vn/data/PHUNGHA_VFA/ca%20chua%201.jpg\" alt=\"Healthy food\"\r\n                class=\"img-fluid mb-4\" style=\"max-width: 50%;\">\r\n        </div>\r\n        <h2 style=\"color: green\"> 1. Cải thiện thị lực </h2>\r\n        <p> Cà chua là nguồn cung cấp vitamin A và C tuyệt vời giúp ngăn ngừa bệnh quáng gà và tăng thị lực cho đôi mắt\r\n            của bạn.\r\n            Một nghiên cứu gần đây cho thấy hàm lượng vitamin A cao của cà chua có thể ngăn ngừa thoái hóa điểm vàng,\r\n            một bệnh\r\n            nghiêm trọng có thể dẫn đến mù mắt. Hơn nữa, cà chua có thể giảm nguy cơ đục thủy tinh thể. Trong cà chua\r\n            còn có các\r\n            chất chống oxy hóa như lycopene, lutein và zeaxanthin. </p>\r\n        <h2 style=\"color: green\"> 2. Phòng chống ung thư </h2>\r\n        <p> Ăn nhiều cà chua có thể giúp chống lại ung thư tuyến tiền liệt. Cà chua cũng có thể giúp giảm nguy cơ một số\r\n            bệnh\r\n            ung thư khác như dạ dày, phổi, cổ tử cung, vòm họng, trực tràng, đại tràng, thực quản, và ung thư buồng\r\n            trứng nhờ\r\n            các chất chống ôxy hóa, đặc biệt là nhờ vào hàm lượng lycopene rất cao có trong cà chua. Tác dụng phòng\r\n            chống ung\r\n            thư của cà chua hơn nhiều khi nấu loại quả này với dầu ô liu. </p>\r\n        <div style=\"display: flex; justify-content: center;\">\r\n            <img src=\"https://cafefcdn.com/203337114487263232/2021/10/19/-16346173216542069545051.jpg\" alt=\"Healthy food\" class=\"img-fluid mb-4\"\r\n                style=\"max-width: 50%;\">\r\n        </div>\r\n        <h2 style=\"color: green\"> 3. Làm sáng da </h2>\r\n        <p> Cà chua chứa lycopene, một chất chống oxy hóa mạnh bảo vệ da khỏi ánh nắng mặt trời và làm cho làn da của\r\n            bạn ít\r\n            nhạy cảm với tia cực tím, một trong những nguyên nhân gây ra nếp nhăn ở da. Chà bột cà chua lên làn da thô\r\n            ráp của\r\n            bạn giúp se lỗ chân lông, tái tạo và làm săn da mặt. </p>\r\n        <h2 style=\"color: green\"> 4. Giảm lượng đường trong máu </h2>\r\n        <p> Cà chua chứa rất ít carbohydrate nên giúp làm giảm lượng đường trong máu. Một vài nghiên cứu tìm thấy vai\r\n            trò của\r\n            các chất chống ôxy hoá trong cà chua bảo vệ thành mạch và thận - những cơ quan hay bị tổn thương do\r\n            bệnh tiểu đường. Cà chua còn chứa crom và chất xơ giúp kiểm\r\n            soát lượng đường trong máu. </p>', '2023-04-23 08:56:33', 'https://cafefcdn.com/203337114487263232/2021/10/19/-16346173216542069545051.jpg');
+
+-- --------------------------------------------------------
+
+--
 -- Cấu trúc bảng cho bảng `cart`
 --
 
@@ -326,7 +438,7 @@ CREATE TABLE `feedback` (
 INSERT INTO `feedback` (`productID`, `customerID`, `comment`, `rating`, `feedback_datetime`) VALUES
 (5, 1, 'Dâu đợt này không tươi', 3, '2023-04-09 21:30:00'),
 (5, 3, 'Dâu tươi ngon', 5, '2023-03-20 14:00:09'),
-(23, 3, NULL, 5, '2023-03-20 13:00:21');
+(23, 3, 'Sản phẩm cực kì tuyệt vời, gia đình chúng tôi rất hài lòng!', 5, '2023-03-20 13:00:21');
 
 -- --------------------------------------------------------
 
@@ -428,8 +540,8 @@ INSERT INTO `products` (`id`, `product_name`, `price`, `unit`, `description`, `o
 (14, 'Đậu cove hữu cơ USDA Food King', 35000, 'vỉ 250G', 'Đậu Cove Hữu Cơ Food King có tên khoa học là Phaseolus vulgaris. Đậu cove chứa rất ít calo, không chứa chất béo bão hòa mà rất giàu vitamin, khoáng chất và vi chất dinh dưỡng thực vật. Ngoài ra, đậu cove tươi còn có lợi ích đáng kể với sức khỏe người dùng. Sản phẩm được trồng không sử dụng thuốc bảo vệ thực vật. Tính ôn, có tác dụng nhuận tràng, bồi bổ nguyên khí. Thích hợp với những người bị bệnh tim, thận, cao huyết áp. Có thể luộc, làm salad, gỏi hoặc xào đều rất ngon.', 'Việt Nam', 95, 255, 'https://product.hstatic.net/1000141988/product/website_-_thuong__1__00d0f6f953d5424a9e7e6518ab490576_1024x1024.jpg', 1),
 (15, 'Bột nêm rau củ hữu cơ Sottolestelle', 105000, 'hộp 100G', 'Bột nêm dưới dạng viên nén dễ hòa tan, giúp rút ngắn thời gian hầm rau củ quả như thông thường mà vẫn cho nước dùng màu sắc tự nhiên với mùi thơm tự nhiên như nước hầm nấu kĩ.\r\nBột nêm rau củ với công nghệ sấy của Sottolestelle và bí quyết chế biến độc đáo giúp bảo toàn được chất xơ, khoáng chất trong mỗi nguyên liệu, không chỉ an toàn, thuần vị tự nhiên mà còn giúp cho bữa ăn của gia đình bạn thêm an lành, tròn vị.\r\nThành phần: Muối, đường nâu, bột rau củ 13,3% (hành tây, cần tây, cà rốt, cà chua, rau bina, rau mùi tây), tinh bột ngô, dầu hướng dương, chiết xuất men, bột nghệ 1%.\r\nSản phẩm dùng làm canh, soup, nước lẩu ngon ngọt tự nhiên mà không cần ninh rau củ; dùng nêm, nếm, tẩm ướp, xào nấu, gia vị chấm các món ăn, bất kể là món chay hay măn, giúp món thịt có thêm chất sơ lợi tiêu hóa.', 'Sottolestelle, Ý', 99, 101, 'https://product.hstatic.net/200000423303/product/bot-nem-rau-cu-huu-co-sotto-1-500x500_3ac6bc9999ff48c2b29480077ac85160.jpg', 3),
 (16, 'Ngũ cốc chocoball hữu cơ Bauckhof', 189000, 'túi', '', 'Đức', 35, 55, 'https://product.hstatic.net/200000423303/product/ngu-coc-chocoball-huu-co-bauckhof-300g_25bf85d75c364c94a1887d77f2d24e29_grande.png', 3),
-(17, 'Bánh ngũ cốc thanh Annie\'s organic Chewy Ganola Ba', 186000, 'hộp 151G', 'Bánh ngũ cốc Annie’s Organic Chewy Granola Bars Peanut Butter Chocolate Chip Hộp 151g gồm có 6 thanh x 25g/thanh.\r\nVị sô cô la và hoàn hảo để mang theo bên bạn mọi lúc mọi nơi, những thanh ngũ cốc Annie’s Chocolate Chip Chewy Granola chứa đầy hương vị thơm ngon mà trẻ em và người lớn đều yêu thích. Được tạo ra với hương vị thơm ngon và kết cấu dai, món ăn nhẹ này được chứng nhận hữu cơ và được đóng gói mỗi thanh với 9 gam ngũ cốc nguyên cám.\r\n\r\nNhững thanh granola này là một lựa chọn lành mạnh cho cả gia đình ăn vặt bất cứ khi nào bạn muốn. Hãy mang theo những thanh ngũ cốc hấp dẫn để bữa sáng thêm thú vị, hoặc dùng vào bữa ăn nhẹ. Annie’s sản xuất các sản phẩm thuộc hơn 20 danh mục phù hợp với gia đình – từ đồ ăn nhẹ có hương vị trái cây và ngũ cốc đến pho mát.', 'Mỹ', 35, 65, 'https://product.hstatic.net/200000423303/product/banh_ngu_coc_thanh_annie_s_organic_chewy_ganola_bars_151g_f2ae2725d99346989f20319c97771cb6_grande.png', 3),
-(18, 'Bánh ngũ cốc thanh Annie\'s organic Chewy Ganola Bars, Chocolate chip', 186000, 'hộp 151G', 'Bánh ngũ cốc Annie’s Organic Chewy Granola Bars, Chocolate Chip Hộp 151g gồm có 6 thanh x 25g/thanh.\r\nVị sô cô la và hoàn hảo để mang theo bên bạn mọi lúc mọi nơi, những thanh ngũ cốc Annie’s Chocolate Chip Chewy Granola chứa đầy hương vị thơm ngon mà trẻ em và người lớn đều yêu thích. Được tạo ra với hương vị thơm ngon và kết cấu dai, món ăn nhẹ này được chứng nhận hữu cơ và được đóng gói mỗi thanh với 9 gam ngũ cốc nguyên cám.\r\n\r\nNhững thanh granola này là một lựa chọn lành mạnh cho cả gia đình ăn vặt bất cứ khi nào bạn muốn. Hãy mang theo những thanh ngũ cốc hấp dẫn để bữa sáng thêm thú vị, hoặc dùng vào bữa ăn nhẹ. Annie’s sản xuất các sản phẩm thuộc hơn 20 danh mục phù hợp với gia đình – từ đồ ăn nhẹ có hương vị trái cây và ngũ cốc đến pho mát.', 'Mỹ', 44, 56, 'https://product.hstatic.net/200000423303/product/h_ngu_coc_thanh_annie_s_organic_chewy_ganola_bars__chocolate_chip_151g_6191539d523e4d1e9e152cc629c32b3e_grande.png', 3),
+(17, 'Bánh ngũ cốc thanh Annie\'s organic', 186000, 'hộp 151G', 'Bánh ngũ cốc Annie’s Organic Chewy Granola Bars Peanut Butter Chocolate Chip Hộp 151g gồm có 6 thanh x 25g/thanh.\r\nVị sô cô la và hoàn hảo để mang theo bên bạn mọi lúc mọi nơi, những thanh ngũ cốc Annie’s Chocolate Chip Chewy Granola chứa đầy hương vị thơm ngon mà trẻ em và người lớn đều yêu thích. Được tạo ra với hương vị thơm ngon và kết cấu dai, món ăn nhẹ này được chứng nhận hữu cơ và được đóng gói mỗi thanh với 9 gam ngũ cốc nguyên cám.\r\n\r\nNhững thanh granola này là một lựa chọn lành mạnh cho cả gia đình ăn vặt bất cứ khi nào bạn muốn. Hãy mang theo những thanh ngũ cốc hấp dẫn để bữa sáng thêm thú vị, hoặc dùng vào bữa ăn nhẹ. Annie’s sản xuất các sản phẩm thuộc hơn 20 danh mục phù hợp với gia đình – từ đồ ăn nhẹ có hương vị trái cây và ngũ cốc đến pho mát.', 'Mỹ', 35, 65, 'https://product.hstatic.net/200000423303/product/banh_ngu_coc_thanh_annie_s_organic_chewy_ganola_bars_151g_f2ae2725d99346989f20319c97771cb6_grande.png', 3),
+(18, 'Bánh ngũ cốc Chocolate chip', 186000, 'hộp 151G', 'Bánh ngũ cốc Annie’s Organic Chewy Granola Bars, Chocolate Chip Hộp 151g gồm có 6 thanh x 25g/thanh.\r\nVị sô cô la và hoàn hảo để mang theo bên bạn mọi lúc mọi nơi, những thanh ngũ cốc Annie’s Chocolate Chip Chewy Granola chứa đầy hương vị thơm ngon mà trẻ em và người lớn đều yêu thích. Được tạo ra với hương vị thơm ngon và kết cấu dai, món ăn nhẹ này được chứng nhận hữu cơ và được đóng gói mỗi thanh với 9 gam ngũ cốc nguyên cám.\r\n\r\nNhững thanh granola này là một lựa chọn lành mạnh cho cả gia đình ăn vặt bất cứ khi nào bạn muốn. Hãy mang theo những thanh ngũ cốc hấp dẫn để bữa sáng thêm thú vị, hoặc dùng vào bữa ăn nhẹ. Annie’s sản xuất các sản phẩm thuộc hơn 20 danh mục phù hợp với gia đình – từ đồ ăn nhẹ có hương vị trái cây và ngũ cốc đến pho mát.', 'Mỹ', 44, 56, 'https://product.hstatic.net/200000423303/product/h_ngu_coc_thanh_annie_s_organic_chewy_ganola_bars__chocolate_chip_151g_6191539d523e4d1e9e152cc629c32b3e_grande.png', 3),
 (19, 'Bánh gạo lứt Homnin hữu cơ Lumlum', 89000, 'hộp 100G', '', 'Thái Lan', 120, 110, 'https://product.hstatic.net/200000423303/product/banh_gao_luc_homnin_huu_co_lumlum_9bce676b87df45bf8000db6d9fe10797_grande.jpg', 3),
 (20, ' Bánh gạo lứt Jasmine hữu cơ Lumlum', 89000, 'hộp 100G', '', 'Thái Lan', 86, 102, 'https://product.hstatic.net/200000423303/product/banh_gao_lut_jasmine_huu_co_100g_lumlum_-_100g_74293317eacf4ca29790030a561bbf94_grande.jpg', 3),
 (21, 'Bánh quy hạt kê hữu cơ cho bé Sottolestelle', 149000, 'túi 250G', '', 'Sottolestelle, Ý', 19, 101, 'https://product.hstatic.net/200000423303/product/banh_qui_hat_ke_huu_co_cho_be_sottolestelle_250g_64ff0445f8e744d7922d3372d9735f90_grande.jpg', 3),
@@ -485,8 +597,7 @@ INSERT INTO `user_account` (`id`, `username`, `password`, `fullname`, `sex`, `Do
 (2, 'khoanguyen333', '87654321', 'Nguyễn Đặng Anh Khoa', 'Nam', '2002-01-01', '0908999888', 'khoanguyen2002@gmail.com', '2 Cách Mạng Tháng 8', 'https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg'),
 (3, 'vy.khanhho12', 'vyvyvy999', 'Hồ Vũ Khánh Vy', 'Nữ', '2002-12-24', '0909123654', 'vykhanhh1213@gmail.com', '16/9 Kỳ Đồng, Phường 9, Quận 3, TPHCM', 'https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg'),
 (4, 'phuck21', 'phuc1357', 'Huỳnh Nguyên Phúc', 'Nam', '2003-02-28', '0909123456', 'phuchuynh.k21@hcmut.edu.vn', 'Ký túc xá khu A', 'https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg'),
-(5, 'thangduong.k21', 'duongthang2468', 'Dương Phúc Thắng', 'Nam', '2003-04-30', '0908987654', 'thangduong2003@gmail.com', 'Ký túc xá khu A', 'https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg'),
-(6, 'khoahihi', '10042002', '', '', '0000-00-00', '', '', '', 'https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg');
+(5, 'thangduong.k21', 'duongthang2468', 'Dương Phúc Thắng', 'Nam', '2003-04-30', '0908987654', 'thangduong2003@gmail.com', 'Ký túc xá khu A', 'https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -510,6 +621,12 @@ ALTER TABLE `banks`
 ALTER TABLE `bank_account`
   ADD PRIMARY KEY (`bank_name`,`acc_number`),
   ADD KEY `customerid_bankacc_constraint` (`customerID`);
+
+--
+-- Chỉ mục cho bảng `blogs`
+--
+ALTER TABLE `blogs`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Chỉ mục cho bảng `category`
@@ -560,6 +677,12 @@ ALTER TABLE `user_account`
 --
 -- AUTO_INCREMENT cho các bảng đã đổ
 --
+
+--
+-- AUTO_INCREMENT cho bảng `blogs`
+--
+ALTER TABLE `blogs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT cho bảng `category`

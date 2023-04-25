@@ -1,0 +1,20 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #f5f5f5;
+}
+
+.form-signup {
+  width: 100%;
+  max-width: 700px;
+  padding: 35px;
+  background-color: rgba(240, 248, 255, 0.573);
+  border-radius: 20px;
+}
