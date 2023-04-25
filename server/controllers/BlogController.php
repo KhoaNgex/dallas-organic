@@ -14,8 +14,20 @@ class BlogController
 			case 'getAllTitle':
 				$this->getAllTitle($data['offset']);
 				break;
+			case 'getAll':
+				$this->getAll();
+				break;
 			case 'getItem':
 				$this->getItem($id);
+				break;
+			case 'createItem':
+				$this->createItem($data);
+				break;
+			case 'editItem':
+				$this->editItem($id, $data);
+				break;
+			case 'removeItem':
+				$this->removeItem($data["id"]);
 				break;
 		}
 	}
