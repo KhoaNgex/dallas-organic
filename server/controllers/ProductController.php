@@ -8,9 +8,6 @@ class ProductController
 	{
 		$this->data_obj = new $this->model;
 		switch ($action) {
-			case 'getAll':
-				$this->getAll();
-				break;
 			case 'getAllTitle':
 				$this->getAllTitle($data);
 				break;
@@ -27,13 +24,16 @@ class ProductController
 				$this->editItem($id, $data);
 				break;
 			case 'removeItem':
-				$this->removeItem($id);
+				$this->removeItem($data['id']);
 				break;
 			case 'filterItem':
 				$this->filterItem($data);
 				break;
 			case 'getBest':
 				$this->getBest();
+				break;
+			case 'getAdmin':
+				$this->getAdmin($data['offset']);
 				break;
 			default:
 				echo json_encode("API doesn't exist!");
@@ -72,5 +72,14 @@ class ProductController
 			echo json_encode("Can't retrieve products from database!");
 		}
 	}
-
+	private function getAdmin($offset)
+	{
+		if ($result = $this->data_obj->findForAdmin($offset)) {
+			http_response_code(200);
+			echo json_encode($result);
+		} else {
+			http_response_code(404);
+			echo json_encode("Can't retrieve products from database!");
+		}
+	}
 }

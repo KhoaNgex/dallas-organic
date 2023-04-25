@@ -27,4 +27,10 @@ class Product
 		$query = "select count_products();";
 		return $this->query($query);
 	}
+
+	public function findForAdmin($offset)
+	{
+		$query = "call getProductForAdmin($offset)";
+		return $this->query($query);
+	}
 }

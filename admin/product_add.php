@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,37 +10,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="./assets/fonts/themify-icons-font/themify-icons/themify-icons.css">
 </head>
+
 <body>
-    <?php
-        include('dbconnection.php');
-        $query_category = 'SELECT * from category';
-        $result_category = mysqli_query($link, $query_category);
-    ?>
     <div class="container">
-        <?php 
-            include('components/navbar.php');
-            include('components/sidebar.php');
+        <?php
+        include('components/navbar.php');
+        include('components/sidebar.php');
         ?>
         <div class="main-content main-content-productadd">
-        <h2>Thêm sản phẩm</h2>
-            <form>
+            <h2>Thêm sản phẩm</h2>
+            <form id="product-form">
                 <div>
                     <label for="product-name">Tên sản phẩm<span style="color: red">*</span>:</label>
                     <input type="text" name="product-name" required placeholder="Tên sản phẩm...">
                 </div>
                 <div>
                     <label for="product-cate">Phân loại:<span style="color: red">*</span>:</label>
-                    <select name="product-cate">
-                        <option value="" style="display: none">Phân loại</option>
-                        <?php
-                            while ($row = mysqli_fetch_assoc($result_category)) {
-                        ?>
-                        <option value="<?php echo $row["cate_id"]?>">
-                            <?php echo $row["cate_name"]?>
-                        </option>
-                        <?php
-                        }
-                        ?>
+                    <select name="product-cate" id="product-cate">
+
                     </select>
                 </div>
                 <div>
@@ -66,11 +54,15 @@
                     <label for="product-description">Mô tả<span style="color: red">*</span>:</label>
                     <textarea name="product-description" required></textarea>
                 </div>
-                <a class="btn" style="margin: 10px 30px 0 0; background-color: green;" onClick="turnBack()">Xác nhận</a>
-                <a class="btn" style="background-color: blue;" onClick="turnBack()">Quay lại</a>
+                <button type="submit" style="margin: 10px 30px 0 0; padding: 15px 20px; ;background-color: green;">Xác nhận</button>
+                <a class="btn" style="background-color: gray; padding: 15px 20px;" onClick="turnBack()">Quay lại</a>
             </form>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
     <script src="admin.js"></script>
+    <script src="js/APIs/product-add.js"></script>
 </body>
+
 </html>

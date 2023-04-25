@@ -30,7 +30,12 @@ class App
 
 		$controller = new $this->controller;
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-			$controller->index($component_action, $component_id, $_POST);
+			$data = json_decode(file_get_contents("php://input"), true);
+			$controller->index($component_action, $component_id, $data);
+		}
+		else if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
+			$data = json_decode(file_get_contents("php://input"), true);
+			$controller->index($component_action, $_GET['id'], $data);
 		} else {
 			$controller->index($component_action, $component_id, $_GET);
 		}

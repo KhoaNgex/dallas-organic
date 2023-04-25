@@ -63,7 +63,7 @@ Trait Model
 
 		return false;
 	}
-
+ 
 	// insert a record 
 	public function insert($data)
 	{

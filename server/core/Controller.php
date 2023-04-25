@@ -20,7 +20,7 @@ trait Controller
 				$this->editItem($id, $data);
 				break;
 			case 'removeItem':
-				$this->removeItem($id);
+				$this->removeItem($data["id"]);
 				break;
 			case 'filterItem':
 				$this->filterItem($data);
@@ -30,7 +30,7 @@ trait Controller
 				break;
 		}
 	}
-
+ 
 	private function getAll()
 	{
 		if ($result = $this->data_obj->findAll()) {

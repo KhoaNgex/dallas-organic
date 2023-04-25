@@ -36,12 +36,6 @@
                 <p>Tài khoản</p>
             </a>
         </li>
-        <!-- <li>
-            <a href="#">
-                <i class="icon fa fa-user-cog"></i>
-                <p>Khách hàng</p>
-            </a>
-        </li> -->
         <li>
             <a href="#">
                 <i class="icon fa fa-chart-line"></i>
@@ -49,7 +43,7 @@
             </a>
         </li>
         <li>
-            <a href="#">
+            <a href="/dallas-organic/client">
                 <i class="icon fa fa-globe"></i>
                 <p>Website</p>
             </a>
