@@ -3,7 +3,7 @@
 class Category
 {
 
-	use Model;
+	use Model; 
 
 	protected $table = 'category';
 

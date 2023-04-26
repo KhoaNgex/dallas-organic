@@ -122,5 +122,37 @@ DELIMITER ;
 
 call getProductForAdmin(0);
 
+drop procedure if exists getAllProductInCart;
+DELIMITER //
+CREATE PROCEDURE `getAllProductInCart` (IN `user_id` INT(11))  
+BEGIN
+    SELECT products.id, product_name, price, unit, quantity, image
+	FROM cart
+	INNER JOIN products ON cart.productID = products.id
+    WHERE cart.userID = user_id;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE `updateQuantityInCart` (IN user_id INT(11), IN product_id INT(11), IN p_quantity INT(11))  
+BEGIN
+    UPDATE cart 
+    set quantity = p_quantity
+    where productID = product_id and userID = user_id;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE `deleteItemInCart` (IN user_id INT(11), IN product_id INT(11))  
+BEGIN
+    delete from cart 
+    where productID = product_id and userID = user_id;
+END //
+DELIMITER ;
+    
+select * from cart;
+
+call updateQuantityInCart(1, 2, 23);
+
 
 

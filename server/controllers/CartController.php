@@ -3,7 +3,7 @@ class CartController
 {
     use Controller;
     protected $model = 'Cart';
- 
+
     public function index($action, $id = -1, $data = [])
     {
         $this->data_obj = new $this->model;
@@ -15,10 +15,10 @@ class CartController
                 $this->createItem($data);
                 break;
             case 'editItem':
-                $this->editItem($id, $data);
+                $this->editItem($data);
                 break;
             case 'removeItem':
-                $this->removeItem($id);
+                $this->removeItem($data);
                 break;
             default:
                 echo json_encode("API doesn't exist!");
@@ -34,6 +34,28 @@ class CartController
         } else {
             http_response_code(404);
             echo json_encode("Can't retrieve cart from database!");
+        }
+    }
+
+    private function editItem($data)
+    {
+        if ($this->data_obj->updateQuantity($data)) {
+            http_response_code(200);
+            echo json_encode("Change quantity in cart successfully!");
+        } else {
+            http_response_code(404);
+            echo json_encode("Can't change quantity in cart!");
+        }
+    }
+
+    private function removeItem($data)
+    {
+        if ($this->data_obj->deleteItem($data)) {
+            http_response_code(200);
+            echo json_encode("Delete item in cart successfully!");
+        } else {
+            http_response_code(404);
+            echo json_encode("Can't delete item in cart!");
         }
     }
 

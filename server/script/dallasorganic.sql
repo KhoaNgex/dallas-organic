@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1:3307
--- Thời gian đã tạo: Th4 25, 2023 lúc 07:19 AM
+-- Thời gian đã tạo: Th4 26, 2023 lúc 07:09 AM
 -- Phiên bản máy phục vụ: 10.4.27-MariaDB
 -- Phiên bản PHP: 8.2.0
 
@@ -30,6 +30,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `createOrder` (IN `recieve_address` 
    VALUES (recieve_address, recieve_phonenum, note, order_date, order_status, ship_fee, userID_ordcus);
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteItemInCart` (IN `user_id` INT(11), IN `product_id` INT(11))   BEGIN
+    delete from cart 
+    where productID = product_id and userID = user_id;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllBlogTitle` (IN `p_offset` INT)   BEGIN 
     DECLARE off_set INT DEFAULT 0;
 	SET off_set = p_offset*9; 
@@ -48,7 +53,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllFeedback` ()   BEGIN
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllProductInCart` (IN `user_id` INT(11))   BEGIN
-    SELECT product_name, price, quantity
+    SELECT products.id, product_name, price, unit, quantity, image
 	FROM cart
 	INNER JOIN products ON cart.productID = products.id
     WHERE cart.userID = user_id;
@@ -122,6 +127,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getProductFeedback` (IN `product_id
     WHERE productID = product_id;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProductForAdmin` (IN `p_offset` INT)   BEGIN 
+	DECLARE off_set INT DEFAULT 0;
+	SET off_set = p_offset*10; 
+    select products.id, product_name, cate_name, price, unit, sold_number, remain_number 
+    from products 
+    inner join category 
+    where products.category_id = category.id
+    order by products.id
+	limit 10
+    offset off_set;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getSomeBlogTitle` ()   BEGIN
     SELECT id, title, created_by, created_at, image
 	FROM blogs
@@ -138,6 +155,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `placeOrder` (IN `recieve_address` V
 		SELECT MAX(id) INTO max_order_id FROM orders;
         SELECT insertNewOrders(userID_ordcus, max_order_id);
     END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateQuantityInCart` (IN `user_id` INT(11), IN `product_id` INT(11), IN `p_quantity` INT(11))   BEGIN
+    UPDATE cart 
+    set quantity = p_quantity
+    where productID = product_id and userID = user_id;
 END$$
 
 --
@@ -268,7 +291,6 @@ CREATE TABLE `admin_account` (
 --
 
 INSERT INTO `admin_account` (`userID_admin`) VALUES
-(2),
 (4);
 
 -- --------------------------------------------------------
@@ -368,12 +390,16 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`userID`, `productID`, `quantity`) VALUES
-(1, 2, 3),
 (1, 3, 2),
 (1, 4, 5),
-(2, 2, 3),
-(2, 12, 7),
-(2, 8, 9);
+(3, 2, 3),
+(3, 12, 7),
+(3, 8, 9),
+(5, 1, 12),
+(5, 23, 12),
+(5, 4, 2),
+(30, 1, 5),
+(30, 23, 5);
 
 -- --------------------------------------------------------
 
@@ -415,7 +441,9 @@ CREATE TABLE `customer_account` (
 INSERT INTO `customer_account` (`userID_customer`) VALUES
 (1),
 (3),
-(5);
+(5),
+(30),
+(32);
 
 -- --------------------------------------------------------
 
@@ -524,7 +552,7 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `product_name`, `price`, `unit`, `description`, `origin`, `sold_number`, `remain_number`, `image`, `category_id`) VALUES
-(1, 'Cà rốt', 42000, 'kg', 'Cà rốt là thực phẩm không thể thiếu đối với căn bếp của gia đình bạn, trong cà rốt có hàm lượng dinh dưỡng dồi dào và  đặc biệt rất tốt cho mắt. Chúng tôi mang cà rốt đến từ Đà Lạt với chất lượng vượt trội, sạch và không sử dụng thuốc hóa học đến với người tiêu dùng, sản phẩm có nguồn gốc rõ ràng do chính các hộ nộng dân Đà Lạt vun trồng, vậy nên quý khách hàng sẽ an tâm hơn khi mua hàng tại Dallas Organic.', 'Đà Lạt, Việt Nam', 100, 200, 'https://bizweb.dktcdn.net/100/437/874/products/50395098-036e-45bc-bb4c-9dbe31704930.jpg?v=1645611457', 1),
+(1, 'Cà rốt', 42000, 'kg', 'Cà rốt là thực phẩm không thể thiếu đối với căn bếp của gia đình bạn, trong cà rốt có hàm lượng dinh dưỡng dồi dào và  đặc biệt rất tốt cho mắt. Chúng tôi mang cà rốt đến từ Đà Lạt với chất lượng vượt trội, sạch và không sử dụng thuốc hóa học đến với người tiêu dùng, sản phẩm có nguồn gốc rõ ràng do chính các hộ nộng dân Đà Lạt vun trồng, vậy nên quý khách hàng sẽ an tâm hơn khi mua hàng tại Dallas Organic.', 'Đà Lạt, Việt Nam', 100, 500, 'https://bizweb.dktcdn.net/100/437/874/products/50395098-036e-45bc-bb4c-9dbe31704930.jpg?v=1645611457', 1),
 (2, 'Táo đỏ Mỹ', 100000, 'kg', 'Táo đỏ là trái cây nhập khẩu 100% từ Mỹ đạt tiêu chuẩn xuất khẩu toàn cầu. Táo đỏ được bảo quản tươi ngon đến tận tay khách hàng. Táo ngon nhất khi có màu đậm, trái chắc, không bị mềm. Táo có thịt trắng, thơm, khi chín ít bột, giòn nhẹ, ngọt thanh, nhiều nước.', 'Mỹ', 95, 185, 'https://product.hstatic.net/1000301274/product/tao-envy-my-size-64-88_dbcc53a439b44ae393543b650e0412a6.png', 2),
 (3, 'Bưởi da xanh túi lưới', 59000, 'trái', 'Bưởi là một loại thực phẩm vô cùng lành mạnh để đưa vào chế độ ăn uống. Phần ruột màu hồng trắng với các tép mọng nước vô cùng hấp dẫn. Trái có vị ngọt, bưởi hái xuống để càng lâu độ ngọt càng cao.', 'Việt Nam', 80, 40, 'https://product.hstatic.net/1000141988/product/buoi_da_xanh_loai_1_tui_luoi_6c8bedf2099f4aba9b8537d343caf55f_large_030b93dffd764b0c9c9abec096534c6a_large.jpg', 2),
 (4, 'Dưa lưới giòn', 89000, 'trái', 'Trái có bề ngoài hình bầu dục, trái non màu xanh khi chín chuyển sang màu vàng rất bắt mắt và có vân lưới nhẹ. Thịt dày màu vàng cam, có hương thơm đặc trưng, có độ ngọt cao nhất, giòn, nhiều nước chứ không giòn khô như khác loại dưa lưới thông thường.\r\nTrọng lượng: 1.2kg-1.8kg/trái.', 'Việt Nam', 80, 32, 'https://test.dannygreenbiomarkt.vn/wp-content/uploads/2021/08/Dua-le-Hong-Kim.png', 2),
@@ -578,7 +606,7 @@ INSERT INTO `products` (`id`, `product_name`, `price`, `unit`, `description`, `o
 CREATE TABLE `user_account` (
   `id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
+  `password` text NOT NULL,
   `fullname` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `sex` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `DoB` date NOT NULL,
@@ -593,11 +621,22 @@ CREATE TABLE `user_account` (
 --
 
 INSERT INTO `user_account` (`id`, `username`, `password`, `fullname`, `sex`, `DoB`, `phonenumber`, `email`, `address`, `avatar`) VALUES
-(1, 'congtran14', '12345678', 'Trần Chí Công', 'Nam', '2002-05-14', '0908999999', 'cong.tran1452002@hcmut.edu.vn', '175 Trương Định, Phường 9, Quận 3, TPHCM', 'https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg'),
-(2, 'khoanguyen333', '87654321', 'Nguyễn Đặng Anh Khoa', 'Nam', '2002-01-01', '0908999888', 'khoanguyen2002@gmail.com', '2 Cách Mạng Tháng 8', 'https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg'),
+(1, 'congtran14', '12345678', 'Trần Chí Công', 'Nam', '2002-05-14', '0908999997', 'cong.tran1462002@hcmut.edu.vn', '175 Trương Định, Phường 9, Quận 3, TPHCM', 'https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg'),
 (3, 'vy.khanhho12', 'vyvyvy999', 'Hồ Vũ Khánh Vy', 'Nữ', '2002-12-24', '0909123654', 'vykhanhh1213@gmail.com', '16/9 Kỳ Đồng, Phường 9, Quận 3, TPHCM', 'https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg'),
 (4, 'phuck21', 'phuc1357', 'Huỳnh Nguyên Phúc', 'Nam', '2003-02-28', '0909123456', 'phuchuynh.k21@hcmut.edu.vn', 'Ký túc xá khu A', 'https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg'),
-(5, 'thangduong.k21', 'duongthang2468', 'Dương Phúc Thắng', 'Nam', '2003-04-30', '0908987654', 'thangduong2003@gmail.com', 'Ký túc xá khu A', 'https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg');
+(5, 'thangduong.k21', 'duongthang2468', 'Dương Phúc Thắng', 'Nam', '2003-04-30', '0908987654', 'thangduong2003@gmail.com', 'Ký túc xá khu A', 'https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg'),
+(30, 'khoanda', '$2y$10$XA1Ty9u9hRXf753z1rPK6.B3pIQKkjsQz.7oG2KtzU..snJx2tQ62', 'Nguyễn Đặng Anh Khoa', 'Nam', '2023-04-18', '0926878567', 'khoameliodasu@gmail.com', 'KTX Khu A ĐHQG HCM', 'https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg'),
+(32, 'khoandaabc', '$2y$10$QC5XuzIa32rwARsnQURrd.0wTXXckdAOX.Vf1QQ77kZD0hr6MpRTW', 'Nguyễn Đặng Anh Khoa', 'Nam', '2002-04-10', '0962646979', 'khoa.nguyenakaivn@hcmut.edu.vn', '175 Trương Định, Phường 9, Quận 3, TPHCM', 'https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg');
+
+--
+-- Bẫy `user_account`
+--
+DELIMITER $$
+CREATE TRIGGER `insert_customer_account` AFTER INSERT ON `user_account` FOR EACH ROW BEGIN
+    INSERT INTO customer_account (userID_customer) VALUES (NEW.id);
+END
+$$
+DELIMITER ;
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -627,6 +666,13 @@ ALTER TABLE `bank_account`
 --
 ALTER TABLE `blogs`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `cart`
+--
+ALTER TABLE `cart`
+  ADD KEY `customerid_cart_constraint` (`userID`),
+  ADD KEY `productid_cart_constraint` (`productID`);
 
 --
 -- Chỉ mục cho bảng `category`
@@ -672,7 +718,8 @@ ALTER TABLE `products`
 -- Chỉ mục cho bảng `user_account`
 --
 ALTER TABLE `user_account`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`);
 
 --
 -- AUTO_INCREMENT cho các bảng đã đổ
@@ -688,7 +735,7 @@ ALTER TABLE `blogs`
 -- AUTO_INCREMENT cho bảng `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT cho bảng `orders`
@@ -700,13 +747,13 @@ ALTER TABLE `orders`
 -- AUTO_INCREMENT cho bảng `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT cho bảng `user_account`
 --
 ALTER TABLE `user_account`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
@@ -724,6 +771,13 @@ ALTER TABLE `admin_account`
 ALTER TABLE `bank_account`
   ADD CONSTRAINT `bankname_constraint` FOREIGN KEY (`bank_name`) REFERENCES `banks` (`bank_name`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `customerid_bankacc_constraint` FOREIGN KEY (`customerID`) REFERENCES `customer_account` (`userID_customer`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Các ràng buộc cho bảng `cart`
+--
+ALTER TABLE `cart`
+  ADD CONSTRAINT `customerid_cart_constraint` FOREIGN KEY (`userID`) REFERENCES `user_account` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `productid_cart_constraint` FOREIGN KEY (`productID`) REFERENCES `products` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Các ràng buộc cho bảng `customer_account`

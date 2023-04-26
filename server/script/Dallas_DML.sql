@@ -110,5 +110,25 @@ INSERT INTO `blogs` (`title`, `subtitle`, `min_read`, `content`, `image`) VALUES
             bệnh tiểu đường. Cà chua còn chứa crom và chất xơ giúp kiểm
             soát lượng đường trong máu. </p>', 'https://cafefcdn.com/203337114487263232/2021/10/19/-16346173216542069545051.jpg');
 
+use dallasorganic;
+INSERT INTO `cart` (userID, productID, quantity) values
+(30, 1, 6),
+(30, 23, 12),
+(30, 4, 2);
+select * from cart;
 
-select * from blogs;
+select * from user_account;
+
+INSERT INTO `user_account` (`address`, `DoB`, `email`, `fullname`, `password`, `phonenumber`, `sex`, `username`) values
+( "KTX Khu A ĐHQG HCM", 
+"2023-04-18", 
+"khoameliodasu@gmail.com", 
+"Nguyễn Đặng Anh Khoa", 
+"4ea5c508a6566e76240543f8feb06fd457777be39549c4016436afda65d2330e", 
+"0926878567", 
+"Nam", 
+"khoanda"); 
+
+select * from user_account;
+
+

@@ -1,18 +1,18 @@
-<?php 
-Trait Model
+<?php
+trait Model
 {
 	use Database;
-	protected $order_type 	= "asc";
+	protected $order_type = "asc";
 	protected $order_column = "id";
-	public $errors 		= [];
+	public $errors = [];
 
 	// get all records
 	public function findAll()
 	{
-	 
+
 		$query = "select * from $this->table order by $this->order_column $this->order_type";
 
-		return $this->query($query); 
+		return $this->query($query);
 	}
 
 	// get records with pre-defined conditions
@@ -23,21 +23,21 @@ Trait Model
 		$query = "select * from $this->table where ";
 
 		foreach ($keys as $key) {
-			$query .= $key . " = :". $key . " && ";
+			$query .= $key . " = :" . $key . " && ";
 		}
 
 		foreach ($keys_not as $key) {
-			$query .= $key . " != :". $key . " && ";
+			$query .= $key . " != :" . $key . " && ";
 		}
-		
-		$query = trim($query," && ");
+
+		$query = trim($query, " && ");
 
 		$query .= " order by $this->order_column $this->order_type";
 		$data = array_merge($data, $data_not);
 
 		return $this->query($query, $data);
 	}
- 
+
 	// get the first record with pre-defined conditions
 	public function first($data, $data_not = [])
 	{
@@ -46,35 +46,32 @@ Trait Model
 		$query = "select * from $this->table where ";
 
 		foreach ($keys as $key) {
-			$query .= $key . " = :". $key . " && ";
+			$query .= $key . " = :" . $key . " && ";
 		}
 
 		foreach ($keys_not as $key) {
-			$query .= $key . " != :". $key . " && ";
+			$query .= $key . " != :" . $key . " && ";
 		}
-		
-		$query = trim($query," && ");
+
+		$query = trim($query, " && ");
 
 		$data = array_merge($data, $data_not);
-		
+
 		$result = $this->query($query, $data);
-		if($result)
+		if ($result)
 			return $result[0];
 
 		return false;
 	}
- 
+
 	// insert a record 
 	public function insert($data)
 	{
-		
 		/** remove unwanted data **/
-		if(!empty($this->allowedColumns))
-		{
+		if (!empty($this->allowedColumns)) {
 			foreach ($data as $key => $value) {
-				
-				if(!in_array($key, $this->allowedColumns))
-				{
+
+				if (!in_array($key, $this->allowedColumns)) {
 					unset($data[$key]);
 				}
 			}
@@ -82,7 +79,7 @@ Trait Model
 
 		$keys = array_keys($data);
 
-		$query = "insert into $this->table (".implode(",", $keys).") values (:".implode(",:", $keys).")";
+		$query = "insert into $this->table (" . implode(",", $keys) . ") values (:" . implode(",:", $keys) . ")";
 		return $this->query($query, $data);
 	}
 
@@ -91,12 +88,10 @@ Trait Model
 	{
 
 		/** remove unwanted data **/
-		if(!empty($this->allowedColumns))
-		{
+		if (!empty($this->allowedColumns)) {
 			foreach ($data as $key => $value) {
-				
-				if(!in_array($key, $this->allowedColumns))
-				{
+
+				if (!in_array($key, $this->allowedColumns)) {
 					unset($data[$key]);
 				}
 			}
@@ -106,10 +101,10 @@ Trait Model
 		$query = "update $this->table set ";
 
 		foreach ($keys as $key) {
-			$query .= $key . " = :". $key . ", ";
+			$query .= $key . " = :" . $key . ", ";
 		}
 
-		$query = trim($query,", ");
+		$query = trim($query, ", ");
 
 		$query .= " where $id_column = :$id_column ";
 
@@ -128,5 +123,5 @@ Trait Model
 
 	}
 
-	
+
 }

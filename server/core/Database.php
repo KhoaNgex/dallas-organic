@@ -18,21 +18,20 @@ trait Database
 		$con = $this->connect();
 		$stm = $con->prepare($query);
 		# prevent sql injection
-		if (str_contains($query, "insert") || str_contains($query, "update")) {
+		if (str_contains($query, "insert") || str_contains($query, "update") || str_contains($query, "delete")) {
 			foreach ($data as $key => $value) {
 				$value = esc(strip_tags(($value)));
 			}
-		}
-		$check = $stm->execute($data);
-		if ($check && (str_contains($query, "select") || str_contains($query, "call"))) {
+			$check = $stm->execute($data);
+			return $check;
+		} else {
+			$check = $stm->execute($data);
 			$result = $stm->fetchAll(PDO::FETCH_OBJ);
 			if (is_array($result) && count($result)) {
 				return $result;
 			}
 			return false;
 		}
-
-		return $check;
 	}
 
 	public function get_row($query, $data = [])

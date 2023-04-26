@@ -1,4 +1,4 @@
-const passwordInput = document.querySelector("#password");
+const passwordInput = document.querySelector("#floatingPassword");
 const togglePassword = document.querySelector("#togglePassword");
 togglePassword.addEventListener("click", function () {
   const type =
@@ -6,7 +6,7 @@ togglePassword.addEventListener("click", function () {
   passwordInput.setAttribute("type", type);
   togglePassword.querySelector("i").classList.toggle("fa-eye");
   togglePassword.querySelector("i").classList.toggle("fa-eye-slash");
-  document.getElementById("password").focus();
+  document.getElementById("floatingPassword").focus();
 });
 
 const createToast = (msg, errsta = false) => {
@@ -27,23 +27,15 @@ const createToast = (msg, errsta = false) => {
 function validateFormData(formData) {
   // Regular expression patterns for validation
   var usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/;
-  var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   var passwordPattern =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
-  var phonePattern = /^[0-9]{10,}$/;
 
   // Validate username
   if (!usernamePattern.test(formData.username)) {
     createToast(
-      "Vui lòng nhập tên tài khoản từ 3-16 ký tự, chỉ bao gồm chữ cái thường, chữ in hoa, số và dấu gạch dưới."
-    , true
-      );
-    return false;
-  }
-
-  // Validate email
-  if (formData.email && !emailPattern.test(formData.email)) {
-    createToast("Vui lòng nhập email hợp lệ.", true);
+      "Vui lòng nhập tên tài khoản từ 3-16 ký tự, chỉ bao gồm chữ cái thường, chữ in hoa, số và dấu gạch dưới.",
+      true
+    );
     return false;
   }
 
@@ -56,38 +48,19 @@ function validateFormData(formData) {
     return false;
   }
 
-  // Validate phone number
-  if (formData.phone && !phonePattern.test(formData.phone)) {
-    createToast(
-      "Số điện thoại chỉ gồm ký tự số và có ít nhất 10 chữ số.",
-      true
-    );
-    return false;
-  }
-
   return true;
 }
 
-$(function () {
-  $("#datepicker").datepicker();
-});
-
 $(document).ready(function () {
   // Handle form submission
-  $("#signup-form").submit(function (event) {
+  $("#form-signin").submit(function (event) {
     // Prevent default form submission
     event.preventDefault();
 
     // Get form data
     var formData = {
-      username: $("#username").val(),
-      email: $("#email").val(),
-      password: $("#password").val(),
-      phonenumber: $("#phone").val(),
-      DoB: $("#date").val(),
-      address: $("#address").val(),
-      fullname: $("#fullname").val(),
-      sex: document.querySelector("[name=gender]").value,
+      username: $("#floatingInput").val(),
+      password: $("#floatingPassword").val(),
     };
 
     // Validate form data
@@ -95,29 +68,20 @@ $(document).ready(function () {
       return;
     }
 
-    formData.DoB = formData.DoB.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
-
-    console.log(formData);
-
     // Send data to server using AJAX
     $.ajax({
-      url: "http://localhost/dallas-organic/server/auth/register",
+      url: "http://localhost/dallas-organic/server/auth/login",
       type: "POST",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
+      contentType: "application/json",
       data: JSON.stringify(formData),
       success: function (result) {
-        createToast(
-          "Đăng ký tài khoản thành công. Bạn có thể trở về trang đăng nhập!"
-        );
+        createToast("Đăng nhập tài khoản thành công!");
+        setTimeout(function () {
+          window.location.href = "index.html";
+        }, 1000);
       },
       error: function (xhr, status, error) {
-        createToast(
-          "Tên tài khoản đã tồn tại hoặc thông tin đăng ký không hợp lệ!",
-          true
-        );
+        createToast("Sai tên đăng nhập hoặc mật khẩu!", true);
       },
     });
   });

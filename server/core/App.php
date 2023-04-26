@@ -32,10 +32,9 @@ class App
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = json_decode(file_get_contents("php://input"), true);
 			$controller->index($component_action, $component_id, $data);
-		}
-		else if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
+		} else if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
 			$data = json_decode(file_get_contents("php://input"), true);
-			$controller->index($component_action, $_GET['id'], $data);
+			$controller->index($component_action, isset($_GET['id']) ? $_GET['id'] : -1, $data);
 		} else {
 			$controller->index($component_action, $component_id, $_GET);
 		}
