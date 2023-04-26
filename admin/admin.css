@@ -452,3 +452,37 @@ option {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
+
+.account-detail-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  margin-top: 40px;
+  width: 800px;
+  padding: 30px;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 0 3px 3px #e9dfdf;
+}
+
+.account-detail-container .avatar-img {
+  text-align: center;
+  margin: auto;
+}
+
+.account-detail-container .avatar-img img{
+  width: 200px;
+  height: 200px;
+}
+
+.account-detail-container .detail-account-info h3 {
+  font-size: 20px;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  color: gray;
+}
+
+.account-detail-container .detail-account-info p {
+  font-size: 15px;
+  margin-bottom: 10px;
+  color: gray;
+}

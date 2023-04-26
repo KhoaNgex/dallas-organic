@@ -17,54 +17,28 @@
         ?>
         <div class="main-content main-content-order">
             <h2>Quản lý Tài khoản</h2>
-            <a href="#"><button style="background-color: #3cba3c; margin-top: 20px;">Thêm tài khoản</button></a>
+            <a href="account_add.php"><button style="background-color: #3cba3c; margin-top: 20px; padding: 15px 20px;">Thêm tài khoản</button></a>
             <input type="text" placeholder="Tìm kiếm">
             <button style="min-width: 40px; padding: 12px 12px; border-radius: 20px; background-color: green;"><i class="fa fa-search"></i></button>
-            <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Tên đăng nhập</th>
-                    <th>Tên người dùng</th>
-                    <th>SĐT</th>
-                    <th>Email</th>
-                    <th>Quyền</th>
-                    <th>Thao tác</th>
-                </tr>
-                <?php
-                    include('dbconnection.php');
-                    $query = 
-                        'SELECT userID, username, fullname, phonenumber, email, "Khách hàng" AS func
-                        from user_account, customer_account where userID = userID_customer
-                        UNION
-                        SELECT userID, username, fullname, phonenumber, email, "Admin" AS func
-                        from user_account, admin_account where userID = userID_admin
-                        ORDER BY userID
-                        ';
-                    // $query = 'SELECT * from products, category WHERE category_id = cate_id';
-                    $result = mysqli_query($link, $query);
-                ?>
-                <?php
-                    while ($row = mysqli_fetch_assoc($result)) {
-                ?>
-                    <tr>
-                        <td><?php echo $row["userID"]?></td>
-                        <td><?php echo $row["username"]?></td>
-                        <td><?php echo $row["fullname"]?></td>
-                        <td><?php echo $row["phonenumber"]?></td>
-                        <td><?php echo $row["email"]?></td>
-                        <td><?php echo $row["func"]?></td>
-                        <td>
-                            <a href=<?php echo "product_detail.php?id=".$row["userID"] ?>><button style="background-color: blue">Chi tiết</button></a>
-                            <a href=<?php echo "product_edit.php?id=".$row["userID"] ?>><button style="background-color: orange">Chỉnh sửa</button></a>
-                            <button style="background-color: red" onClick="displayDeleteModal()">Xóa</button>
-                        </td>
-                    </tr>
-                <?php
-                }
-                ?>
+            <table id="user-list">
             </table>
+            
+            <div class="delete-modal">
+                <div class="delete-modal-container">
+                    <p>Bạn chắc chắn muốn xóa tài khoản này?</p>
+                    <div style="text-align: center;">
+                        <button style="margin-right: 20px; background-color: #ff7800a3; color: #000;"
+                            onClick="deleteModal()">Xác nhận</button>
+                        <button style="margin-left: 20px; color: #000;" onClick="removeDeleteModal()">Quay lại</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script src="admin.js"></script>
+    <script src="js/APIs/account.js"></script>
 </body>
 </html>
+
