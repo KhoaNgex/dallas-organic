@@ -184,7 +184,7 @@ call placeOrder('KTX Khu A ĐHQG HCM',
 
 drop procedure if exists `addProductToCart`;
 DELIMITER //
-CREATE PROCEDURE `addProductToCart` (IN user_id INT(11), IN product_id INT(11), IN q_quantity INT)  
+CREATE PROCEDURE `insertProductToCart` (IN user_id INT(11), IN product_id INT(11), IN q_quantity INT)  
 BEGIN
     INSERT INTO cart (userID, productID, quantity)
 	VALUES (user_id, product_id, q_quantity)
