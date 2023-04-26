@@ -13,7 +13,7 @@
             </a>
         </li>
         <li>
-            <a href="order.php">
+            <a href="category.php">
                 <i class="icon fa fa-shopping-cart"></i>
                 <p>Phân loại sản phẩm</p>
             </a>
