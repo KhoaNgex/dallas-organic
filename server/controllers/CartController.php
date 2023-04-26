@@ -37,6 +37,17 @@ class CartController
         }
     }
 
+    private function createItem($data)
+    {
+        if ($this->data_obj->insert($data)) {
+            http_response_code(200);
+            echo json_encode("Change quantity in cart successfully!");
+        } else {
+            http_response_code(404);
+            echo json_encode("Can't change quantity in cart!");
+        }
+    }
+
     private function editItem($data)
     {
         if ($this->data_obj->updateQuantity($data)) {

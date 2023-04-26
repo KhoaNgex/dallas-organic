@@ -78,6 +78,9 @@ class AuthController
 			case 'check':
 				$this->userCheck();
 				break;
+			case 'info':
+				$this->userInfo();
+				break;
 			default:
 				echo json_encode("API doesn't exist!");
 				break;
@@ -86,7 +89,7 @@ class AuthController
 
 	public function userLogin($data)
 	{
-
+ 
 		if ($this->validateLogin($data)) {
 			$row = $this->data_obj->first(array("username" => $data["username"]));
 
@@ -94,6 +97,9 @@ class AuthController
 				if (password_verify($data['password'], $row->password)) {
 					http_response_code(200);
 					$_SESSION['USER'] = $row->id;
+					$_SESSION['USER_NAME'] = $row->fullname;
+					$_SESSION['USER_PHONE'] = $row->phonenumber;
+					$_SESSION['USER_ADDRESS'] = $row->address;
 					echo json_encode('Login successfully!');
 				} else {
 					http_response_code(404);
@@ -124,8 +130,12 @@ class AuthController
 
 	public function userLogout()
 	{
-		if (!empty($_SESSION['USER']))
+		if (!empty($_SESSION['USER'])) {
 			unset($_SESSION['USER']);
+			unset($_SESSION['USER_NAME']);
+			unset($_SESSION['USER_PHONE']);
+			unset($_SESSION['USER_ADDRESS']);
+		}
 		echo json_encode("Logout successfully!");
 	}
 
@@ -134,6 +144,17 @@ class AuthController
 		if (isset($_SESSION['USER'])) {
 			// Session variable is set
 			echo json_encode($_SESSION['USER']);
+		} else {
+			// Session variable is not set
+			echo json_encode('not set');
+		}
+	}
+
+	public function userInfo()
+	{
+		if (isset($_SESSION['USER'])) {
+			// Session variable is set
+			echo json_encode(array("name" => $_SESSION['USER_NAME'], "phone" => $_SESSION['USER_PHONE'], "address" => $_SESSION['USER_ADDRESS']));
 		} else {
 			// Session variable is not set
 			echo json_encode('not set');

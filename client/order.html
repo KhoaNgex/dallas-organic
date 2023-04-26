@@ -23,6 +23,84 @@
 
     <link href="css/style.css" rel="stylesheet">
     <link href="css/style1.css" rel="stylesheet">
+    <style>
+        button.show-modal,
+        .modal-box {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        section.active .show-modal {
+            display: none;
+        }
+
+        .overlay {
+            position: fixed;
+            height: 100%;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        section.active .overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 380px;
+            width: 100%;
+            padding: 30px 20px;
+            border-radius: 24px;
+            background-color: #fff;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%) scale(1.2);
+        }
+
+        section.active .modal-box {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .modal-box i {
+            font-size: 70px;
+            color: #4070f4;
+        }
+
+        .modal-box h2 {
+            margin-top: 20px;
+            font-size: 25px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .modal-box h3 {
+            font-size: 16px;
+            font-weight: 400;
+            color: #333;
+            text-align: center;
+        }
+
+        .modal-box .buttons {
+            margin-top: 25px;
+        }
+
+        .modal-box button {
+            font-size: 14px;
+            padding: 6px 12px;
+            margin: 0 10px;
+        }
+    </style>
 </head>
 
 <body>
@@ -33,8 +111,22 @@
     </div>
     <!-- Spinner End -->
 
+    <section>
+        <span class="overlay"></span>
+
+        <div class="modal-box">
+            <i class="fa-regular fa-circle-check"></i>
+            <h2 class="text-primary mb-2">Thành công</h2>
+            <h3>Bạn đã đặt đơn hàng thành công. Tiếp tục mua sắm nhé!</h3>
+
+            <div class="buttons">
+                <button class="close-btn btn btn-primary">Tiếp tục mua sắm</button>
+            </div>
+        </div>
+    </section>
+
     <!-- header -->
-    <div class="cart-header wow fadeIn"  data-wow-delay="0.1s">
+    <div class="cart-header wow fadeIn" data-wow-delay="0.1s">
         <a href="index.html">
             <h1 class="fw-bold text-primary m-0"><span class="text-secondary">D</span>alla<span
                     class="text-secondary">S</span></h1>
@@ -63,21 +155,9 @@
             <p>Kiểm tra thật kỹ thông tin trước khi xác nhận đặt hàng nhé!</p>
         </div>
         <div class="order-container">
-            <form action="" class="customer-info-container wow fadeIn"  data-wow-delay="0.1s">
+            <form action="" class="customer-info-container wow fadeIn" data-wow-delay="0.1s">
                 <h1>Thông tin khách hàng:</h1>
-                <div class="customer-info">
-                    <div>
-                        <label for="name">Tên người nhận:</label>
-                        <input id="name" name="name" type="text" value="Trần Chí Công">
-                    </div>
-                    <div>
-                        <label for="phonenum">Số điện thoại:</label>
-                        <input id="phonenum" type="text" value="0908402431">
-                    </div>
-                    <div>
-                        <label for="address">Địa chỉ:</label>
-                        <input id="address" type="text" value="175 Trương Định, phường 9, quận 3, thành phố Hồ Chí Minh">
-                    </div>
+                <div class="customer-info" id="customer-info">
                 </div>
                 <h1 style="margin-top: 50px">Phương thức thanh toán:</h1>
                 <div class="payment-method">
@@ -88,12 +168,14 @@
                     </div>
                     <div>
                         <input name="payment-med" type="radio" value="atm">
-                        <img src="https://img.freepik.com/premium-vector/credit-cards-icon-payment-symbol-bank-account-sign_53562-15455.jpg" alt="">
+                        <img src="https://img.freepik.com/premium-vector/credit-cards-icon-payment-symbol-bank-account-sign_53562-15455.jpg"
+                            alt="">
                         Tài khoản ngân hàng
-                    </div> 
+                    </div>
                     <div>
                         <input name="payment-med" type="radio" value="zalopay">
-                        <img src="https://play-lh.googleusercontent.com/NfFBz1Rxk0nQ7RsOk0kXbi1AEp1ZJ3rzJHbwRlmheZEDPPHh7dscqyxyX-ehxTl7tw=w240-h480-rw" alt="">
+                        <img src="https://play-lh.googleusercontent.com/NfFBz1Rxk0nQ7RsOk0kXbi1AEp1ZJ3rzJHbwRlmheZEDPPHh7dscqyxyX-ehxTl7tw=w240-h480-rw"
+                            alt="">
                         ZaloPay
                     </div>
                     <div>
@@ -103,70 +185,16 @@
                     </div>
                 </div>
                 <div class="order-btn-container">
-                    <a class="order-btn" style="background-color: #e7671d;" href="cart.html">Quay lại</a>
-                    <a class="order-btn" style="background-color: #80b500;" href="">Xác nhận</a>
+                    <a id="return-btn" class="order-btn" style="background-color: #e7671d;">Quay lại</a>
+                    <a id="confirm-btn" class="order-btn" style="background-color: #80b500;">Xác nhận</a>
                 </div>
             </form>
             <div>
                 <h1>Thông tin đơn hàng:</h1>
-                <div class="order-infor">
-                    <div class="order-item">
-                        <div class="order-product-info">
-                            <p style="font-weight: bold;">1x</p>
-                            <h5>Ngũ cốc chocoball hữu cơ Bauckhof</h5>
-                            <p>189.000vnđ</p>
-                        </div>
-                        <div class="order-product-img">
-                            <div style="margin-top: 10px">
-                                <p style="margin-bottom: 10px">Đơn vị: túi</p>
-                                <p style="margin-bottom: 10px">Giá: 189.000/túi</p>
-                            </div>
-                            <img src="https://product.hstatic.net/200000423303/product/ngu-coc-chocoball-huu-co-bauckhof-300g_25bf85d75c364c94a1887d77f2d24e29_grande.png" alt="">
-                        </div>
-                    </div>
-                    <div class="order-item">
-                        <div class="order-product-info">
-                            <p style="font-weight: bold;">3x</p>
-                            <h5>Cà rốt</h5>
-                            <p>126.000vnđ</p>
-                        </div>
-                        <div class="order-product-img">
-                            <div style="margin-top: 10px">
-                                <p style="margin-bottom: 10px">Đơn vị: kg</p>
-                                <p style="margin-bottom: 10px">Giá: 42.000/kg</p>
-                            </div>
-                            <img src="https://bizweb.dktcdn.net/100/437/874/products/50395098-036e-45bc-bb4c-9dbe31704930.jpg?v=1645611457" alt="">
-                        </div>
-                    </div>
-                    <div class="order-item">
-                        <div class="order-product-info">
-                            <p style="font-weight: bold;">4x</p>
-                            <h5>Đuôi heo hữu cơ</h5>
-                            <p>408.000vnđ</p>
-                        </div>
-                        <div class="order-product-img">
-                            <div style="margin-top: 10px">
-                                <p style="margin-bottom: 10px">Đơn vị: 300G</p>
-                                <p style="margin-bottom: 10px">Giá: 102.000/300G</p>
-                            </div>
-                            <img src="https://product.hstatic.net/200000423303/product/duoi-heo-huu-co_c21cb690881d4ce481e512d403a8a8d1_grande.jpg" alt="">
-                        </div>
-                    </div>
+                <div class="order-infor" id="order-info">
+
                 </div>
-                <div class="price-overall">
-                    <div class="price-overall-item">
-                        <p class="price-overall-label">Tiền hàng:</p>
-                        <p class="price-overall-value">723.000 vnđ</p>
-                    </div>
-                    <div class="price-overall-item">
-                        <p class="price-overall-label">Phí giao hàng:</p>
-                        <p class="price-overall-value">50.000 vnđ</p>
-                    </div>
-                    <hr>
-                    <div class="price-overall-item">
-                        <p style="font-weight: bold" class="price-overall-label">Tổng đơn hàng:</p>
-                        <p style="font-weight: bold" class="price-overall-value">773.000 vnđ</p>
-                    </div>
+                <div class="price-overall" id="price-overall">
                 </div>
             </div>
         </div>
@@ -234,14 +262,16 @@
     <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i
             class="bi bi-arrow-up"></i></a>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
     <script src="lib/wow/wow.min.js"></script>
     <script src="lib/easing/easing.min.js"></script>
     <script src="lib/waypoints/waypoints.min.js"></script>
     <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
     <script src="js/main.js"></script>
-    <script src="js/APIs/home.js"></script>
+    <script src="js/APIs/order.js?v=1"></script>
 </body>
 
 </html>

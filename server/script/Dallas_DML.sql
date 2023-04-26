@@ -115,7 +115,6 @@ INSERT INTO `cart` (userID, productID, quantity) values
 (30, 1, 6),
 (30, 23, 12),
 (30, 4, 2);
-select * from cart;
 
 select * from user_account;
 

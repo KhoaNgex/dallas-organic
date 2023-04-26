@@ -2,7 +2,7 @@
 
 trait Database
 {
-
+ 
 	private function connect()
 	{
 		$servername = DBHOST;

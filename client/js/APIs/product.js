@@ -14,6 +14,27 @@ function setListAttribute() {
   sort_order = $("#sort-select-order").val();
 }
 
+function turnCart() {
+  const quantityEle = document.querySelector("[name=quantity]");
+  $.ajax({
+    url: "http://localhost/dallas-organic/server/cart/createItem",
+    type: "POST",
+    data: JSON.stringify({
+      productID: Number(id),
+      userID: Number(localStorage.getItem("user_id")),
+      quantity: 1,
+    }),
+    contentType: "application/json",
+    success: function (result) {
+      console.log("Cart updated successfully!");
+      window.location.href = "cart.html";
+    },
+    error: function (xhr, status, error) {
+      alert("An error occurred while updating the product: " + error);
+    },
+  });
+}
+
 function filterProduct() {
   setListAttribute();
   $("#pagination").twbsPagination("destroy");
@@ -94,7 +115,9 @@ function productRender(products) {
         `
                                     </div>
                                     <div class="text-center p-4">
-                                        <a class="d-block h5 mb-2" style="height: 65px;" href="product-detail.html?id=`+product.id+`">` +
+                                        <a class="d-block h5 mb-2" style="height: 65px;" href="product-detail.html?id=` +
+        product.id +
+        `">` +
         product.product_name +
         `</a>
                                         <span class="text-primary me-1">` +
@@ -106,11 +129,15 @@ function productRender(products) {
                                     </div>
                                     <div class="d-flex border-top">
                                         <small class="w-50 text-center border-end py-2">
-                                            <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>Xem
+                                            <a class="text-body" href="product-detail.html?id=` +
+        product.id +
+        `"><i class="fa fa-eye text-primary me-2"></i>Xem
                                                 thêm</a>
                                         </small>
                                         <small class="w-50 text-center py-2">
-                                            <a class="text-body" href=""><i
+                                            <a class="text-body"  href="product-detail.html?id=` +
+        product.id +
+        `"><i
                                                     class="fa fa-shopping-bag text-primary me-2"></i>Mua ngay</a>
                                         </small>
                                     </div>
@@ -129,8 +156,7 @@ function initPagination() {
     .twbsPagination({
       totalPages: product_count / product_per_page + 1,
       visiblePages: 5,
-      onPageClick: function (event, page) {
-      },
+      onPageClick: function (event, page) {},
     })
     .on("page", function (event, page) {
       let offset = page - 1;

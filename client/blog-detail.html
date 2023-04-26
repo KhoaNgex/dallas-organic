@@ -18,13 +18,27 @@
 
     <link href="lib/animate/animate.min.css" rel="stylesheet">
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <link href="css/style.css" rel="stylesheet">
 </head>
 
 <body>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document" style="max-width: 300px; top: 120px;">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-end">
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close" style="border: white;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Spinner Start -->
     <div id="spinner"
         class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
@@ -70,15 +84,19 @@
                     <a href="contact.html" class="nav-item nav-link text-light">Liên hệ</a>
                 </div>
                 <div class="d-none d-lg-flex ms-2">
-                    <a class="btn-sm-square bg-white rounded-circle ms-3" href="">
+                    <button class="btn-sm-square bg-white rounded-circle ms-3"
+                        onclick="window.location.href = `product.html`;">
                         <small class="fa fa-search text-body"></small>
-                    </a>
-                    <a class="btn-sm-square bg-white rounded-circle ms-3" href="">
+                    </button>
+                    <button type="button" class="btn-sm-square bg-white rounded-circle ms-3" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
                         <small class="fa fa-user text-body"></small>
-                    </a>
-                    <a class="btn-sm-square bg-white rounded-circle ms-3" href="">
-                        <small class="fa fa-shopping-bag text-body"></small>
-                    </a>
+                    </button>
+                    <div id="cart-button">
+
+                    </div>
+
+                    <!-- Button trigger modal -->
                 </div>
             </div>
         </nav>
@@ -178,6 +196,7 @@
 
     <script src="js/main.js"></script>
     <script src="js/APIs/blog-detail.js"></script>
+    <script src="js/APIs/check-user.js"></script>
 </body>
 
 </html>
