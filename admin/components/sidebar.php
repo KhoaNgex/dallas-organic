@@ -37,7 +37,7 @@
             </a>
         </li>
         <li>
-            <a href="#">
+            <a href="statistics_product.php">
                 <i class="icon fa fa-chart-line"></i>
                 <p>Báo cáo</p>
             </a>

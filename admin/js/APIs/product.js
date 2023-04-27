@@ -83,7 +83,7 @@ function productRender(products) {
         product.id +
         `
                     </td>
-                    <td>
+                    <td style="font-weight: bold">
                        ` +
         product.product_name +
         `

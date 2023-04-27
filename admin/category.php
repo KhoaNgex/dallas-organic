@@ -55,10 +55,10 @@
                 ?>
                     <tr>
                         <td><?php echo $row["category_id"]?></td>
-                        <td><?php echo $row["cate_name"]?></td>
-                        <td><?php echo $row["numofproducts"]?></td>
-                        <td><?php echo $row["numofsold"]?></td>
-                        <td><?php echo $row["numofremain"]?></td>
+                        <td style="font-weight: bold"><?php echo $row["cate_name"]?></td>
+                        <td><?php echo number_format($row["numofproducts"])?></td>
+                        <td><?php echo number_format($row["numofsold"])?></td>
+                        <td><?php echo number_format($row["numofremain"])?></td>
                         <td>
                             <a href=<?php echo "product_cate.php?cate_id=".$row["category_id"] ?>><button style="background-color: blue">Chi tiết</button></a>
                             <form action="" method="POST" style="display: inline-block;">
@@ -96,7 +96,7 @@
                 ?>
                     <tr>
                         <td><?php echo $row["id"]?></td>
-                        <td><?php echo $row["cate_name"]?></td>
+                        <td style="font-weight: bold"><?php echo $row["cate_name"]?></td>
                         <td>0</td>
                         <td>0</td>
                         <td>0</td>

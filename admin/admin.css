@@ -158,15 +158,15 @@ option {
 /* main-content dashboard */
 .main-content-dashboard {
   display: grid;
-  grid-template-rows: 1fr 4fr;
+  grid-template-rows: 185px 1fr;
   background-color: #8080800a;
-  height: calc(100% - 60px);
+  /* height: calc(100% - 60px); */
 }
 
 .cards {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-gap: 30px;
+  grid-gap: 20px;
   padding: 30px 40px 20px;
 }
 
@@ -210,9 +210,11 @@ option {
 
 .charts {
   display: grid;
-  grid-template-columns: 2fr 3fr;
-  grid-gap: 20px;
-  padding: 10px 20px 30px;
+  grid-template-columns: 5fr 4fr;
+  grid-template-rows: 450px 1fr;
+  grid-gap: 30px;
+  padding: 10px 40px 30px;
+  min-height: 1000px;
 }
 
 .chart {
@@ -222,11 +224,16 @@ option {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
 }
 
+.chart:hover {
+  cursor: pointer;
+}
+
 .chart p {
   text-align: center;
   color: #808080c2;
   font-size: 20px;
   font-weight: 600;
+  margin-bottom: 20px;
 }
 
 #bar-chart {
@@ -563,4 +570,21 @@ option {
 
 .fixed-order-infor {
   border-right: 1px solid green;
+}
+
+.sale-statistics-nav {
+  margin-top: 20px;
+}
+
+.sale-statistics-nav a {
+  padding: 10px 0; 
+  width: 150px; 
+  display:inline-block; 
+  text-align: center;
+  box-shadow: 0 0 0px 2px #e1e1e1;
+}
+
+.sale-statistics-nav a:hover {
+  cursor: pointer;
+  background-color: #01640d !important;
 }

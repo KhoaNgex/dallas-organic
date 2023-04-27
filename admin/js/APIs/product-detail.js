@@ -42,7 +42,7 @@ $.ajax({
         `"><button
                                 style="background-color: orange">Chỉnh sửa</button></a>
                         <button style="background-color: red" onClick="displayDeleteModal()">Xóa</button>
-                        <a href="product.php"><button style="background-color: grey">Quay lại</button></a>
+                        <button style="background-color: grey" onClick="turnBack()">Quay lại</button>
                     </div>
                 </div>
                 <div class="detail-info">
