@@ -20,7 +20,7 @@ body {
 }
 
 .cart-header .cart-nav-bar {
-  display: inline-block;
+  display: flex;
   line-height: 60px;
   position: absolute;
   right: 30px;

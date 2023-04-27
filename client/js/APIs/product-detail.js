@@ -3,6 +3,59 @@ const id = params.get("id");
 var cate_name;
 var average_rating;
 
+function turnCart() {
+  const quantityEle = document.querySelector("[name=quantity]");
+  $.ajax({
+    url: "http://localhost/dallas-organic/server/cart/createItem",
+    type: "POST",
+    data: JSON.stringify({
+      productID: Number(id),
+      userID: Number(localStorage.getItem("user_id")),
+      quantity: Number(quantityEle.value),
+    }),
+    contentType: "application/json",
+    success: function (result) {
+      console.log("Cart updated successfully!");
+      window.location.href = "cart.html";
+    },
+    error: function (xhr, status, error) {
+      alert("An error occurred while updating the product: " + error);
+    },
+  });
+}
+ 
+function postReview() {
+  var FormData = {
+    productID: Number(id),
+    customerID: Number(localStorage.getItem("user_id")),
+    comment: $("#message").val(),
+    rating: $("#point").val(),
+  };
+  $.ajax({
+    url: "http://localhost/dallas-organic/server/feedback/createItem",
+    type: "POST",
+    data: JSON.stringify(FormData),
+    contentType: "application/json",
+    success: function (result) {
+      alert("Đăng tải bình luận thành công!");
+      window.location.href = "product-detail.html?id=" + FormData.productID;
+    },
+    error: function (xhr, status, error) {
+      alert("Đăng tải bình luận thất bại!");
+    },
+  });
+}
+
+function decQuantity() {
+  const quantityEle = document.querySelector("[name=quantity]");
+  quantityEle.value = Number(quantityEle.value) - 1;
+}
+
+function incQuantity() {
+  const quantityEle = document.querySelector("[name=quantity]");
+  quantityEle.value = Number(quantityEle.value) + 1;
+}
+
 $.ajax({
   url: "http://localhost/dallas-organic/server/product/getItem/" + id,
   type: "GET",
@@ -104,19 +157,21 @@ $.ajax({
                     <div class="d-flex align-items-center mb-4 pt-2">
                         <div class="input-group quantity mr-3" style="width: 130px;">
                             <div class="input-group-btn">
-                                <button class="btn btn-primary btn-minus">
+                                <button class="btn btn-primary btn-minus" onclick="decQuantity();">
                                     <i class="fa fa-minus"></i>
                                 </button>
                             </div>
-                            <input type="text" class="form-control bg-light text-center" value="1">
+                            <input name="quantity" type="text" class="form-control bg-light text-center" value="1">
                             <div class="input-group-btn">
-                                <button class="btn btn-primary btn-plus">
+                                <button class="btn btn-primary btn-plus" onclick="incQuantity();">
                                     <i class="fa fa-plus"></i>
                                 </button>
                             </div>
                         </div>
-                        <button class="btn btn-primary" style="margin-left: 20px;"><i
+                        <div id="sell-button-container">
+                        <button class="btn btn-primary" style="margin-left: 20px;" onclick="turnCart();"><i
                                 class="fa fa-shopping-cart mr-1"></i> Mua ngay</button>
+                        </div>
                     </div>
                     <div class="d-flex pt-2">
                         <p class="text-dark font-weight-medium mb-0 mr-2">Chia sẻ:</p>
@@ -142,6 +197,32 @@ $.ajax({
       // Hiển thị danh sách sản phẩm trên giao diện
       $("#product-detail").html(productHtml);
       $("#product-desc").html(productDesc);
+      $.ajax({
+        url: "http://localhost/dallas-organic/server/auth/check",
+        type: "GET",
+        success: function (response) {
+          if (response === "not set") {
+            $("#modal-body")
+              .html(`  <div style="display: flex; flex-direction: column; align-items: center;">
+                        <a class="btn btn-primary w-75 mb-3" href="signin.html">Đăng nhập</a>
+                        <a class="btn btn-secondary w-75" href="signup.html">Đăng ký</a>
+                    </div>`);
+            $("#sell-button-container")
+              .html(`<button type="button" class="btn btn-primary" style="margin-left: 20px;" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
+                        Mua ngay
+                    </button>`);
+            $("#review-button")
+              .html(`<button type="button" class="btn btn-primary w-100 mt-3" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
+                        Gửi lại đánh giá
+                    </button>`);
+          }
+        },
+        error: function (xhr, status, error) {
+          console.log("Error:", error);
+        },
+      });
     } catch (e) {
       console.log("Error parsing JSON response:", e);
     }

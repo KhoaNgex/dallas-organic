@@ -9,9 +9,7 @@ trait Model
 	// get all records
 	public function findAll()
 	{
-
 		$query = "select * from $this->table order by $this->order_column $this->order_type";
-
 		return $this->query($query);
 	}
 
@@ -67,16 +65,6 @@ trait Model
 	// insert a record 
 	public function insert($data)
 	{
-		/** remove unwanted data **/
-		if (!empty($this->allowedColumns)) {
-			foreach ($data as $key => $value) {
-
-				if (!in_array($key, $this->allowedColumns)) {
-					unset($data[$key]);
-				}
-			}
-		}
-
 		$keys = array_keys($data);
 
 		$query = "insert into $this->table (" . implode(",", $keys) . ") values (:" . implode(",:", $keys) . ")";
@@ -86,17 +74,6 @@ trait Model
 	// update a record 
 	public function update($id, $data, $id_column = 'id')
 	{
-
-		/** remove unwanted data **/
-		if (!empty($this->allowedColumns)) {
-			foreach ($data as $key => $value) {
-
-				if (!in_array($key, $this->allowedColumns)) {
-					unset($data[$key]);
-				}
-			}
-		}
-
 		$keys = array_keys($data);
 		$query = "update $this->table set ";
 

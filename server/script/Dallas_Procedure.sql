@@ -142,17 +142,55 @@ BEGIN
 END //
 DELIMITER ;
 
+drop procedure if exists `deleteItemInCart`;
 DELIMITER //
 CREATE PROCEDURE `deleteItemInCart` (IN user_id INT(11), IN product_id INT(11))  
 BEGIN
     delete from cart 
-    where productID = product_id and userID = user_id;
+    where 
+		CASE
+			WHEN product_id = -1 THEN productID like "%"
+			else productID = product_id 
+		end
+		and userID = user_id;
 END //
 DELIMITER ;
     
 select * from cart;
 
+call deleteItemInCart(1, -1);
+
 call updateQuantityInCart(1, 2, 23);
 
+call placeOrder ("hellohello", 0962646979, "fghgf", current_date(), "Đang chuẩn bị", 5000, 30);
 
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `placeOrder` (IN `recieve_address` VARCHAR(200), IN `recieve_phonenum` INT(11), IN `note` VARCHAR(200), IN `order_date` DATE, IN `order_status` VARCHAR(30), IN `ship_fee` INT(11), IN `userID_ordcus` INT(11))   BEGIN
+	DECLARE max_order_id INT;
+	IF NOT check_cart_and_update_product(userID_ordcus) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid cart';
+	ELSE 
+		CALL createOrder(recieve_address, recieve_phonenum, note, order_date, order_status, ship_fee, userID_ordcus);
+		SELECT MAX(id) INTO max_order_id FROM orders;
+        SELECT insertNewOrders(userID_ordcus, max_order_id);
+    END IF;
+END //
+DELIMITER ;
 
+call placeOrder('KTX Khu A ĐHQG HCM',
+0926878567,'fhghhjfff',current_date(),'Đang chuẩn bị',
+230200,
+30);
+
+drop procedure if exists `addProductToCart`;
+DELIMITER //
+CREATE PROCEDURE `insertProductToCart` (IN user_id INT(11), IN product_id INT(11), IN q_quantity INT)  
+BEGIN
+    INSERT INTO cart (userID, productID, quantity)
+	VALUES (user_id, product_id, q_quantity)
+	ON DUPLICATE KEY UPDATE quantity = quantity + q_quantity;
+END //
+DELIMITER ;
+select * from cart;
+
+call addProductToCart(1, 2, 7);

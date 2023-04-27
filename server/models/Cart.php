@@ -5,7 +5,7 @@ class Cart
 
 	use Model;
 
-	protected $table = 'cart'; 
+	protected $table = 'cart';
 
 	public function findAll($user_id)
 	{
@@ -22,10 +22,19 @@ class Cart
 		return $this->query($query);
 	}
 
-	public function deleteItem($data)
+	public function insert($data)
 	{
 		$userID = $data["userID"];
 		$productID = $data["productID"];
+		$quantity = $data["quantity"];
+		$query = "call insertProductToCart($userID, $productID, $quantity);";
+		return $this->query($query);
+	}
+
+	public function deleteItem($data)
+	{
+		$userID = $data["userID"];
+		$productID = $data["productID"] != "" ? $data["productID"] : -1;
 		$query = "call deleteItemInCart($userID, $productID);";
 		return $this->query($query);
 	}

@@ -93,7 +93,7 @@ $.ajax({
                     </div>
                 </div>
                 <div class="btn-container">
-                    <button class="cart-btn" style="background-color: #e7671d;" onclick="deleteCard();">Xóa hết</button>
+                    <button class="cart-btn" style="background-color: #e7671d;" onclick="deleteCart();">Xóa hết</button>
                     <button class="cart-btn" style="background-color: #80b500;" onclick="proceedOrder();">Xác nhận</button>
                 </div>
             </div>`;
@@ -101,52 +101,59 @@ $.ajax({
       $("#cart-list").html(productListHtml);
       $("input[type='number']").inputSpinner();
       const inputs = document.querySelectorAll("input");
+      var numberPattern = /^[0-9]+$/;
       inputs.forEach((input) => {
         input.addEventListener("input", function (event) {
-          let total_id = "total-" + event.target.name;
+          if (numberPattern.test(event.target.value)) {
+              let total_id = "total-" + event.target.name;
 
-          let price = document
-            .getElementById("price-" + event.target.name)
-            .getAttribute("data-value");
+              let price = document
+                .getElementById("price-" + event.target.name)
+                .getAttribute("data-value");
 
-          let prev_total_price = document
-            .getElementById(total_id)
-            .getAttribute("data-value");
+              let prev_total_price = document
+                .getElementById(total_id)
+                .getAttribute("data-value");
 
-          let new_total_price = price * event.target.value;
+              let new_total_price = price * event.target.value;
 
-          $("#" + total_id).html(
-            `<p>
+              $("#" + total_id).html(
+                `<p>
                   ` +
-              Number(new_total_price).toLocaleString("en-US") +
-              `
+                  Number(new_total_price).toLocaleString("en-US") +
+                  `
                 </p>`
-          );
+              );
 
-          total = total - prev_total_price + new_total_price;
-          $("#total-cart").html(Number(total).toLocaleString("en-US") + ` vnđ`);
+              total = total - prev_total_price + new_total_price;
+              $("#total-cart").html(
+                Number(total).toLocaleString("en-US") + ` vnđ`
+              );
 
-          document
-            .getElementById(total_id)
-            .setAttribute("data-value", new_total_price);
+              document
+                .getElementById(total_id)
+                .setAttribute("data-value", new_total_price);
 
-          // backend
-          $.ajax({
-            url: "http://localhost/dallas-organic/server/cart/editItem",
-            type: "PUT",
-            data: JSON.stringify({
-              productID: event.target.name,
-              userID: localStorage.getItem("user_id"),
-              quantity: event.target.value,
-            }),
-            contentType: "application/json",
-            success: function (result) {
-              console.log("Cart updated successfully!");
-            },
-            error: function (xhr, status, error) {
-              alert("An error occurred while updating the product: " + error);
-            },
-          });
+              // backend
+              $.ajax({
+                url: "http://localhost/dallas-organic/server/cart/editItem",
+                type: "PUT",
+                data: JSON.stringify({
+                  productID: event.target.name,
+                  userID: localStorage.getItem("user_id"),
+                  quantity: event.target.value,
+                }),
+                contentType: "application/json",
+                success: function (result) {
+                  console.log("Cart updated successfully!");
+                },
+                error: function (xhr, status, error) {
+                  alert(
+                    "An error occurred while updating the product: " + error
+                  );
+                },
+              });
+          } 
         });
       });
     } catch (e) {
@@ -181,4 +188,30 @@ function deleteCartItem(p_id) {
       alert("An error occurred while deleting the product: " + error);
     },
   });
+}
+
+function deleteCart() {
+  $.ajax({
+    url:
+      "http://localhost/dallas-organic/server/cart/removeItem?userID=" +
+      localStorage.getItem("user_id") +
+      "&productID=",
+    type: "DELETE",
+    success: function (result) {
+      console.log("Cart products deleted successfully!");
+      total = 0;
+      $("#cart-list").html(`Không tìm thấy sản phẩm nào trong giỏ hàng!`);
+    },
+    error: function (xhr, status, error) {
+      alert("An error occurred while deleting the products: " + error);
+    },
+  });
+}
+
+function proceedOrder() {
+  if (total == 0) {
+    alert("Giỏ hàng của bạn đang trống. Tiếp tục mua sắm nhé!");
+  } else {
+    window.location.href = "order.html";
+  }
 }

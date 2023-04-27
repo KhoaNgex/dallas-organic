@@ -1,53 +1,4 @@
-function logout() {
-  $.ajax({
-    url: "http://localhost/dallas-organic/server/auth/logout",
-    type: "GET",
-    success: function (response) {
-      window.location.href = "signin.html";
-      localStorage.removeItem("user_id");
-    },
-    error: function (xhr, status, error) {
-      console.log("Error:", error);
-    },
-  });
-}
-
 $(document).ready(function () {
-  $.ajax({
-    url: "http://localhost/dallas-organic/server/auth/check",
-    type: "GET",
-    success: function (response) {
-      if (response === "not set") {
-        $("#modal-body")
-          .html(`  <div style="display: flex; flex-direction: column; align-items: center;">
-                        <a class="btn btn-primary w-75 mb-3" href="signin.html">Đăng nhập</a>
-                        <a class="btn btn-secondary w-75" href="signup.html">Đăng ký</a>
-                    </div>`);
-          $("#cart-button")
-            .html(`<button type="button" class="btn-sm-square bg-white rounded-circle ms-3" data-bs-toggle="modal"
-                        data-bs-target="#exampleModal">
-                        <small class="fa fa-shopping-bag text-body"></small>
-                    </button>`);
-      } else {
-        localStorage.setItem("user_id", response);
-        $("#modal-body")
-          .html(`  <div style="display: flex; flex-direction: column; align-items: center;">
-                        <a class="btn btn-primary w-75 mb-3" href="profile.html">Xem profile</a>
-                        <button type="button" class="btn btn-secondary w-75" onClick="logout();">Đăng xuất</button>
-                    </div>`);
-        $("#cart-button").html(
-          ` <button class="btn-sm-square bg-white rounded-circle ms-3" onclick="window.location.href = '` +
-            `cart.html` +
-            `';">
-                            <small class="fa fa-shopping-bag text-body"></small>
-                        </button>`
-        );
-      }
-    },
-    error: function (xhr, status, error) {
-      console.log("Error:", error);
-    },
-  });
   $.ajax({
     url: "http://localhost/dallas-organic/server/product/getBest",
     type: "GET",
@@ -89,8 +40,8 @@ $(document).ready(function () {
                                                 thêm</a>
                                         </small>
                                         <small class="w-50 text-center py-2">
-                                            <a class="text-body" href=""><i
-                                                    class="fa fa-shopping-bag text-primary me-2"></i>Mua ngay</a>
+                                            <div class="text-body"><i
+                                                    class="fa fa-shopping-bag text-primary me-2"></i>Giao 24H</div>
                                         </small>
                                     </div>
                                 </div>
