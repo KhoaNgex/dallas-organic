@@ -55,7 +55,7 @@
                     <label for="product-description">Mô tả<span style="color: red">*</span>:</label>
                     <textarea name="product-description" required></textarea>
                 </div>
-                <button type="submit" style="margin: 10px 30px 0 0; padding: 15px 20px; ;background-color: green;">Xác nhận</button>
+                <button type="submit" style="margin: 10px 30px 0 0; padding: 15px 20px; background-color: green;">Xác nhận</button>
                 <a class="btn" style="background-color: gray; padding: 15px 20px;" onClick="turnBack()">Quay lại</a>
             </form>
         </div>

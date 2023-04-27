@@ -24,31 +24,13 @@
                 mysqli_close($link);
             }
         ?>
-        <?php
-            if(isset($_POST['cate-name-add-btn'])) {
-                $new_cate_name = $_POST['cate-name-add'];
-                include('dbconnection.php');
-                $query = "INSERT INTO category (cate_name) VALUES ('$new_cate_name')";
-                mysqli_query($link, $query);
-                mysqli_close($link);
-            }
-        ?>
-        <?php
-            if(isset($_POST['cate-delete-btn'])) {
-                $cate_id = $_POST['cate-id-delete'];
-                include('dbconnection.php');
-                $query = "DELETE FROM category WHERE id = $cate_id";
-                mysqli_query($link, $query);
-                mysqli_close($link);
-            }
-        ?>
         <?php 
             include('components/navbar.php');
             include('components/sidebar.php');
         ?>
         <div class="main-content main-content-product">
             <h2>Quản lý phân loại sản phẩm</h2>
-            <form action="" method="POST">
+            <form action="category_add.php" method="POST">
                 <input name="cate-name-add" type="text" placeholder="Thêm loại sản phẩm..." style="margin-left: 0">
                 <button name="cate-name-add-btn" style="background-color: #3cba3c; margin-top: 20px; padding: 15px 20px;">Thêm</button>
             </form>
@@ -84,10 +66,19 @@
                                 <input name="cate-name-edit" type="text" required placeholder="Sửa tên phân loại..." style="width: 230px; margin-left: 0;">
                                 <button name="cate-name-edit-btn" style="background-color: orange">Chỉnh sửa</button>
                             </form>
-                            <form action="" method="POST" style="display: inline-block;">
-                                <input name="cate-id-delete" style="display: none" value=<?php echo $row["category_id"]?>>
-                                <button name="cate-delete-btn" style="background-color: red">Xóa</button>
-                            </form>
+                            <div style="display: inline-block;">
+                                <input style="display: none" value=<?php echo $row["category_id"]?>>
+                                <button style="background-color: red"  onClick="displayConfirmDeleteModal('<?php echo "delmodal-".$row["category_id"]?>')">Xóa</button>
+                                <div class="delete-modal" id="<?php echo "delmodal-".$row["category_id"]?>">
+                                    <div class="delete-modal-container">
+                                        <p>Bạn chắc chắn muốn xóa loại sản phẩm?</p>
+                                        <div style="text-align: center;">
+                                            <a href=<?php echo "category_delete.php?id=".$row["category_id"]?>><button style="margin-right: 50px; background-color: #ff7800a3; color: #000;">Xác nhận</button></a>
+                                            <button style="margin-left: 50px; color: #000;" onClick="removeDeleteModal()">Quay lại</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 <?php
@@ -116,10 +107,19 @@
                                 <input name="cate-name-edit" type="text" required placeholder="Sửa tên phân loại..." style="width: 230px; margin-left: 0;">
                                 <button name="cate-name-edit-btn" style="background-color: orange">Chỉnh sửa</button>
                             </form>
-                            <form action="" method="POST" style="display: inline-block;">
-                                <input name="cate-id-delete" style="display: none" value=<?php echo $row["id"]?>>
-                                <button name="cate-delete-btn" style="background-color: red">Xóa</button>
-                            </form>
+                            <div style="display: inline-block;">
+                                <input style="display: none" value=<?php echo $row["id"]?>>
+                                <button style="background-color: red"  onClick="displayConfirmDeleteModal('<?php echo "delmodal-".$row["id"]?>')">Xóa</button>
+                                <div class="delete-modal" id="<?php echo "delmodal-".$row["id"]?>">
+                                    <div class="delete-modal-container">
+                                        <p>Bạn chắc chắn muốn xóa loại sản phẩm?</p>
+                                        <div style="text-align: center;">
+                                            <a href=<?php echo "category_delete.php?id=".$row["id"]?>><button style="margin-right: 50px; background-color: #ff7800a3; color: #000;">Xác nhận</button></a>
+                                            <button style="margin-left: 50px; color: #000;" onClick="removeDeleteModal()">Quay lại</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 <?php
@@ -127,16 +127,15 @@
                 mysqli_close($link);
                 ?>
             </table>
-            <div class="delete-modal">
-                <div class="delete-modal-container">
-                    <p>Bạn chắc chắn muốn xóa sản phẩm?</p>
-                    <div style="text-align: center;">
-                        <button style="margin-right: 50px; background-color: #ff7800a3; color: #000;" onClick="removeDeleteModal()">Xác nhận</button>
-                        <button style="margin-left: 50px; color: #000;" onClick="removeDeleteModal()">Quay lại</button>
-                    </div>
-                </div>
-            </div>
         </div>
+        
+        <script>
+            function displayConfirmDeleteModal(value) {
+                console.log(value);
+                document.getElementById(value).classList.add("open");
+            }
+
+        </script>
         <script src="admin.js"></script>
     </div>
 </body>

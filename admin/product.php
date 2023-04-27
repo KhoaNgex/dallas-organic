@@ -13,6 +13,11 @@
 </head>
 
 <body>
+    <?php
+        include('dbconnection.php');
+        $query_category = 'SELECT * from category';
+        $result_category = mysqli_query($link, $query_category);
+    ?>
     <div class="container">
         <?php
         include('components/navbar.php');
@@ -26,6 +31,22 @@
             <input type="text" placeholder="Tìm kiếm">
             <button style="min-width: 40px; padding: 12px 12px; border-radius: 20px; background-color: green;"><i
                     class="fa fa-search"></i></button>
+
+            <div style="display: inline-block;">
+                <select name="cate" id="cate" style="width: 200px;">
+                    <option value="" style="display: none">Sản phẩm theo loại</option>
+                    <?php
+                        while ($row = mysqli_fetch_assoc($result_category)) {
+                    ?>
+                        <option value="<?php echo $row["id"]?>"><?php echo $row["cate_name"]?></option>
+                    <?php
+                    }
+                    ?>
+                </select>
+                <button style="min-width: 40px; padding: 12px 12px; border-radius: 20px; background-color: green;" onClick="directToProductCate()">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
 
             <div style="margin-top: 20px;">
                 <nav aria-label="Page navigation">

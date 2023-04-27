@@ -25,9 +25,9 @@
             </a>
         </li>
         <li>
-            <a href="#">
-                <i class="icon fa fa-coins"></i>
-                <p>Doanh thu</p>
+            <a href="blog.php">
+                <i class="fas fa-blog"></i>
+                <p>Blog</p>
             </a>
         </li>
         <li>
