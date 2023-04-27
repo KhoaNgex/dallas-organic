@@ -4,7 +4,6 @@ $.ajax({
   dataType: "json",
   success: function (blogs) {
     try {
-      console.log(blogs);
       // Xử lý kết quả trả về từ REST API
       var blogListHtml = "";
       $.each(blogs, function (index, blog) {

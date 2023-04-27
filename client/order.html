@@ -104,6 +104,21 @@
 </head>
 
 <body>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document" style="max-width: 300px; top: 120px;">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-end">
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close" style="border: white;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Spinner Start -->
     <div id="spinner"
         class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
@@ -137,12 +152,16 @@
             <a href="product.html">Cửa hàng</a>
             <a href="blog.html">Organic Blog</a>
             <a href="contact.html">Liên hệ</a>
-            <a href="">
-                <small class="fa fa-user text-body"></small>
-            </a>
-            <a href="">
-                <small class="fa fa-shopping-bag text-body"></small>
-            </a>
+            <div class="d-lg-flex align-items-center justify-content-center">
+                <button class="btn-sm-square bg-white rounded-circle ms-3"
+                    onclick="window.location.href = `product.html`;">
+                    <small class="fa fa-search text-body"></small>
+                </button>
+                <button type="button" class="btn-sm-square bg-white rounded-circle ms-3" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal">
+                    <small class="fa fa-user text-body"></small>
+                </button>
+            </div>
         </div>
     </div>
     <!-- end header -->
@@ -229,15 +248,15 @@
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-light mb-4">Quick Links</h4>
-                    <a class="btn btn-link" href="">Về Dallas</a>
-                    <a class="btn btn-link" href="">Liên hệ chúng tôi</a>
-                    <a class="btn btn-link" href="">Ghé cửa hàng</a>
-                    <a class="btn btn-link" href="">Đọc blog hữu cơ</a>
-                    <a class="btn btn-link" href="">Hỗ trợ</a>
+                    <a class="btn btn-link" href="about.html">Về Dallas</a>
+                    <a class="btn btn-link" href="contact.html">Liên hệ chúng tôi</a>
+                    <a class="btn btn-link" href="product.html">Ghé cửa hàng</a>
+                    <a class="btn btn-link" href="blog.html">Đọc blog hữu cơ</a>
+                    <a class="btn btn-link" href=mailto:khoameliodasu@gmail.com">Hỗ trợ</a>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-light mb-4">Newsletter</h4>
-                    <p>Nhân tin mới nhất từ chúng tôi</p>
+                    <p>Nhận tin mới nhất từ chúng tôi</p>
                     <div class="position-relative mx-auto" style="max-width: 400px;">
                         <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text"
                             placeholder="Email của bạn">
@@ -271,6 +290,7 @@
     <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
     <script src="js/main.js"></script>
+    <script src="js/APIs/check-user.js"></script>
     <script src="js/APIs/order.js?v=1"></script>
 </body>
 

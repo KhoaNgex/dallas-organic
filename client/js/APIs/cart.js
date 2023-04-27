@@ -101,52 +101,59 @@ $.ajax({
       $("#cart-list").html(productListHtml);
       $("input[type='number']").inputSpinner();
       const inputs = document.querySelectorAll("input");
+      var numberPattern = /^[0-9]+$/;
       inputs.forEach((input) => {
         input.addEventListener("input", function (event) {
-          let total_id = "total-" + event.target.name;
+          if (numberPattern.test(event.target.value)) {
+              let total_id = "total-" + event.target.name;
 
-          let price = document
-            .getElementById("price-" + event.target.name)
-            .getAttribute("data-value");
+              let price = document
+                .getElementById("price-" + event.target.name)
+                .getAttribute("data-value");
 
-          let prev_total_price = document
-            .getElementById(total_id)
-            .getAttribute("data-value");
+              let prev_total_price = document
+                .getElementById(total_id)
+                .getAttribute("data-value");
 
-          let new_total_price = price * event.target.value;
+              let new_total_price = price * event.target.value;
 
-          $("#" + total_id).html(
-            `<p>
+              $("#" + total_id).html(
+                `<p>
                   ` +
-              Number(new_total_price).toLocaleString("en-US") +
-              `
+                  Number(new_total_price).toLocaleString("en-US") +
+                  `
                 </p>`
-          );
+              );
 
-          total = total - prev_total_price + new_total_price;
-          $("#total-cart").html(Number(total).toLocaleString("en-US") + ` vnđ`);
+              total = total - prev_total_price + new_total_price;
+              $("#total-cart").html(
+                Number(total).toLocaleString("en-US") + ` vnđ`
+              );
 
-          document
-            .getElementById(total_id)
-            .setAttribute("data-value", new_total_price);
+              document
+                .getElementById(total_id)
+                .setAttribute("data-value", new_total_price);
 
-          // backend
-          $.ajax({
-            url: "http://localhost/dallas-organic/server/cart/editItem",
-            type: "PUT",
-            data: JSON.stringify({
-              productID: event.target.name,
-              userID: localStorage.getItem("user_id"),
-              quantity: event.target.value,
-            }),
-            contentType: "application/json",
-            success: function (result) {
-              console.log("Cart updated successfully!");
-            },
-            error: function (xhr, status, error) {
-              alert("An error occurred while updating the product: " + error);
-            },
-          });
+              // backend
+              $.ajax({
+                url: "http://localhost/dallas-organic/server/cart/editItem",
+                type: "PUT",
+                data: JSON.stringify({
+                  productID: event.target.name,
+                  userID: localStorage.getItem("user_id"),
+                  quantity: event.target.value,
+                }),
+                contentType: "application/json",
+                success: function (result) {
+                  console.log("Cart updated successfully!");
+                },
+                error: function (xhr, status, error) {
+                  alert(
+                    "An error occurred while updating the product: " + error
+                  );
+                },
+              });
+          } 
         });
       });
     } catch (e) {
