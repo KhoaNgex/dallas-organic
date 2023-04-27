@@ -19,4 +19,18 @@ class Order
 		$query = "call placeOrder('" . $recieve_address . "', $recieve_phonenum,'" . $note . "'," . $order_date . ",'" . $order_status . "', $ship_fee, $userID_ordcus);";
 		return $this->query($query);
 	}
+
+	public function get_user_orders($data)
+	{
+		$order_id = $data['id'];
+		$query = "call getUserOrder($order_id)";
+		return $this->query($query);
+	}
+
+	public function get_order_details($order_id)
+	{
+		$query = "call getOrderDetail($order_id)";
+		$query_2 = "call getSpecificOrder($order_id)";
+		return array_merge($this->query($query_2), $this->query($query));
+	}
 }

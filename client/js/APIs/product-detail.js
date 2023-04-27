@@ -23,7 +23,7 @@ function turnCart() {
     },
   });
 }
- 
+
 function postReview() {
   var FormData = {
     productID: Number(id),
@@ -48,7 +48,7 @@ function postReview() {
 
 function decQuantity() {
   const quantityEle = document.querySelector("[name=quantity]");
-  quantityEle.value = Number(quantityEle.value) - 1;
+  if (quantityEle.value > 0) quantityEle.value = Number(quantityEle.value) - 1;
 }
 
 function incQuantity() {
@@ -161,7 +161,7 @@ $.ajax({
                                     <i class="fa fa-minus"></i>
                                 </button>
                             </div>
-                            <input name="quantity" type="text" class="form-control bg-light text-center" value="1">
+                            <input name="quantity" type="text" id="quantity-input" class="form-control bg-light text-center" value="1">
                             <div class="input-group-btn">
                                 <button class="btn btn-primary btn-plus" onclick="incQuantity();">
                                     <i class="fa fa-plus"></i>

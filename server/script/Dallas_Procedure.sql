@@ -194,3 +194,37 @@ DELIMITER ;
 select * from cart;
 
 call addProductToCart(1, 2, 7);
+
+drop procedure if exists `getUserOrder`;
+DELIMITER //
+CREATE PROCEDURE `getUserOrder` (IN user_id INT(11))  
+BEGIN
+   select *, calculate_order_total_price(id) as total_price from orders where userid_ordcus = user_id;
+END //
+DELIMITER ;
+
+drop procedure if exists `getOrderDetail`;
+DELIMITER //
+CREATE PROCEDURE `getOrderDetail` (IN order_id INT(11))  
+BEGIN 
+   select quantity, image, product_name, unit, price
+	from ordered_product
+	join products on ordered_product.productID = products.id
+	where ordered_product.orderID = order_id;
+END //
+DELIMITER ;
+
+
+call getOrderDetail(30);
+
+drop procedure if exists `getSpecificOrder`;
+DELIMITER //
+CREATE PROCEDURE `getSpecificOrder` (IN order_id int)  
+BEGIN
+   select *, calculate_order_total_price(id) as total_price from orders where id = order_id;
+END //
+DELIMITER ;
+
+
+
+

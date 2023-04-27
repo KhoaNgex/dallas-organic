@@ -86,3 +86,16 @@ BEGIN
   RETURN TRUE;
 END//
 DELIMITER ;
+
+DELIMITER //
+CREATE FUNCTION calculate_order_total_price(order_id int)
+RETURNS INT
+BEGIN
+  DECLARE total_price INT;
+  SELECT sum(price*quantity) INTO total_price 
+  FROM ordered_product
+  inner join products on products.id = productID
+  where orderID = order_id; 
+  RETURN total_price;
+END//
+DELIMITER ;

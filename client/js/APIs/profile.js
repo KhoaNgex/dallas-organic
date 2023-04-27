@@ -28,12 +28,18 @@ $(document).ready(function () {
         var infoHtml = "";
         infoHtml =
           infoHtml +
-          ` <img src="` +
+          ` <div class="d-flex">
+             <img id="image-self" src="` +
           info.avatar +
           `"
-                            class="rounded-circle" style="width: 200px; margin-top: 30px; margin-bottom: 20px;"
-                            alt="Avatar" />
-                        <h2 class="text-white fw-bold mb-2" id="name-left">` +
+            class="rounded-circle" style="width: 200px; height: 200px; margin-top: 30px; margin-bottom: 20px;"
+            alt="Avatar" />
+            <a id="img-btn" href="" style="width: 20px; position: relative; top: 200px; right: 20px;">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="white" d="M290.74 93.24l128.02 128.02-277.99 277.99-114.14 12.6C11.35 513.54-1.56 500.62.14 485.34l12.7-114.22 277.9-277.88zm207.2-19.06l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.76 18.75-49.16 0-67.91z"/></svg>
+            </a>
+              <input class="file-upload" style="display: none;" type="file" accept="image/*"/>
+          </div>
+                           <h2 class="text-white fw-bold mb-2" id="name-left">` +
           info.fullname +
           `</h2>
                         <h5 class="mb-4"><i>@` +
@@ -123,6 +129,44 @@ $(document).ready(function () {
               createToast("Cập nhật thông tin thất bại: " + error, true);
             },
           });
+        });
+
+        // edit image
+
+        var readURL = function (input) {
+          if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+              $("#image-self").attr("src", e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+            var new_path = "img/avatar/" + input.files[0].name;
+            $.ajax({
+              url:
+                "http://localhost/dallas-organic/server/user/editItem?id=" +
+                localStorage.getItem("user_id"),
+              type: "PUT",
+              data: JSON.stringify({ avatar: new_path }),
+              contentType: "application/json",
+              success: function (result) {
+                createToast("Cập nhật avatar thành công!");
+              },
+              error: function (xhr, status, error) {
+                createToast("Cập nhật avatar thất bại: " + error, true);
+              },
+            });
+          }
+        };
+
+        $(".file-upload").on("change", function () {
+          readURL(this);
+        });
+
+        $("#img-btn").click(function (e) {
+          e.preventDefault();
+          $(".file-upload").click();
         });
       } catch (e) {
         console.log("Error parsing JSON response:", e);
