@@ -486,3 +486,81 @@ option {
   margin-bottom: 10px;
   color: gray;
 }
+
+.main-content.main-content-orderdetail {
+  padding: 30px 50px 30px 30px;
+}
+
+.orderdetail-content-container {
+  margin-top: 30px;
+  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  
+}
+
+.orderdetail-content-container .fixed-order-infor div{
+  margin-bottom: 20px;
+}
+
+.order-product-info-container {
+  margin-top: 40px;
+  width: 80%;
+  box-shadow: 0 0 5px 1px #c0bfbf;
+  border: none;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.order-product-info-container .order-product-item {
+  width: 100%;
+  height: 150px;
+  grid-template-rows: 1fr 1fr;
+  padding: 10px 30px;
+  border-bottom: 1px solid rgb(230, 223, 223);
+}
+
+.order-product-info-container .order-product-item .order-product-info {
+  display: grid;
+  grid-template-columns: 1fr 4fr 2fr;
+}
+
+
+.order-product-info-container .order-product-item .order-product-img img {
+  width: 90px;
+  height: 80px;
+  border: 1px solid rgb(234, 229, 229);
+}
+
+.orderdetail-content-container .adjustable-order-infor {
+  /* padding-top: 20px; */
+  padding-left: 20px;
+}
+
+.orderdetail-content-container .adjustable-order-infor h3 {
+  margin-bottom: 20px;
+}
+
+.orderdetail-content-container .adjustable-order-infor div {
+  margin-bottom: 20px;
+}
+
+.orderdetail-content-container .adjustable-order-infor div label {
+  display: inline-block;
+  width: 130px;
+}
+
+.orderdetail-content-container .adjustable-order-infor div input, 
+.orderdetail-content-container .adjustable-order-infor div textarea {
+  margin-left: 10px;
+  width: 400px;
+}
+
+.orderdetail-content-container .adjustable-order-infor div textarea {
+  padding: 10px 20px;
+  height: 100px;
+}
+
+.fixed-order-infor {
+  border-right: 1px solid green;
+}
