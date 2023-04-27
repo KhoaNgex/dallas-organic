@@ -39,7 +39,7 @@
                     FROM ( 
                         SELECT products.id, product_name, price, sold_number, products.category_id, category.cate_name, sold_number*price as sale 
                         FROM products JOIN category ON products.category_id = category.id ) A 
-                    GROUP BY A.cate_name';
+                    GROUP BY A.cate_name ORDER BY A.category_id';
                 $result = mysqli_query($link, $query); 
             ?>
             <?php

@@ -61,12 +61,12 @@
                     <canvas id="bar-chart-2" ></canvas>
                 </div>
                 <div class="chart">
-                    <p>Doanh thu (12 tháng)</p>
+                    <p>Doanh thu trong 12 tháng gần nhất</p>
                     <canvas id="line-chart"></canvas>
                 </div>
                 
                 <div class="chart">
-                    <p>Top 5 sản phẩm bán chạy</p>
+                    <p>Sản phẩm đã bán (theo loại)</p>
                     <canvas id="bar-chart-3" ></canvas>
                 </div>
             </div>
@@ -103,12 +103,50 @@
         }
         mysqli_close($link)
     ?>
+    <?php
+        include('dbconnection.php');
+        $query2 = 'SELECT LASTTABLE.order_date, LASTTABLE.day, LASTTABLE.month, LASTTABLE.year, sum(LASTTABLE.total) AS sale, count(*) AS order_num
+        FROM (
+        SELECT orderID, total, order_date, order_status, DAY(order_date) AS day, MONTH(order_date) AS month, YEAR(order_date) AS year
+            FROM (
+                (SELECT * 
+                FROM(
+                    (SELECT orderID, sum(price*quantity) AS total from products, ordered_product WHERE id = productID GROUP BY orderID) E 
+                    JOIN orders F ON E.orderID = F.id)) X JOIN user_account Y ON X.userID_ordcus = Y.id
+            ) WHERE order_status = "Hoàn thành" ) LASTTABLE GROUP BY LASTTABLE.order_date ORDER BY LASTTABLE.year, LASTTABLE.month DESC LIMIT 12';
+        $result2 = mysqli_query($link, $query2);
+        $month_name = array();
+        $month_sale = array();
+        while ($row = mysqli_fetch_assoc($result2)) {
+            $month_name[] = $row["month"]."/".$row["year"];
+            $month_sale[] = $row["sale"];
+        }
+        mysqli_close($link)
+    ?>
+    <?php
+        include('dbconnection.php');
+        $query3 = 'SELECT cate_name, SUM(sold_number) as numofsold
+                    from products, category WHERE products.category_id = category.id
+                    GROUP by category_id';
+        $result3 = mysqli_query($link, $query3);
+        $cate_name_pie = array();
+        $cate_sold_number_pie = array();
+        while ($row = mysqli_fetch_assoc($result3)) {
+            $cate_name_pie[] = $row["cate_name"];
+            $cate_sold_number_pie[] = $row["numofsold"];
+        }
+        mysqli_close($link)
+    ?>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const product_label_lst = <?php echo json_encode($product_name); ?>;
         const sold_number_lst = <?php echo json_encode($sold_number); ?>;
         const cate_label_lst = <?php echo json_encode($cate_name); ?>;
         const cate_sold_number_lst = <?php echo json_encode($cate_sold_number); ?>;
+        const month_name_lst = <?php echo json_encode($month_name); ?>;
+        const month_sale_lst = <?php echo json_encode($month_sale); ?>;
+        const cate_label_pie_lst = <?php echo json_encode($cate_name_pie); ?>;
+        const cate_sold_pie_lst = <?php echo json_encode($cate_sold_number_pie); ?>;
         
         const ctx1 = document.getElementById('bar-chart-1');
 
@@ -120,11 +158,11 @@
                 label: '# Số lượng đã bán',
                 data: sold_number_lst,
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.4)',
-                    'rgba(54, 162, 235, 0.4)',
-                    'rgba(255, 206, 86, 0.4)',
-                    'rgba(75, 192, 192, 0.4)',
-                    'rgba(153, 102, 255, 0.4)'
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(153, 102, 255, 0.7)'
                 ],
                 borderWidth: 1
             }]
@@ -159,9 +197,9 @@
                 label: '# Số lượng đã bán',
                 data: cate_sold_number_lst,
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.4)',
-                    'rgba(54, 162, 235, 0.4)',
-                    'rgba(255, 206, 86, 0.4)'
+                    'rgba(255, 99, 132, 0.8)',
+                    'rgba(54, 162, 235, 0.8)',
+                    'rgba(255, 206, 86, 0.8)'
                 ],
                 borderWidth: 1
             }]
@@ -186,15 +224,16 @@
                 }
             }
         });
+        
         const ctx3 = document.getElementById('line-chart');
 
         new Chart(ctx3, {
             type: 'line',
             data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            labels: month_name_lst.reverse(),
             datasets: [{
                 label: '# Doanh thu',
-                data: [12122000, 9120000, 9350000, 10120000, 9550000, 13123456, 9876543, 8888888, 1357579, 9753531, 12468864, 11980000],
+                data: month_sale_lst.reverse(),
                 borderWidth: 1
             }]
             },
@@ -210,37 +249,13 @@
         const ctx4 = document.getElementById('bar-chart-3');
 
         new Chart(ctx4, {
-            type: 'bar',
+            type: 'pie',
             data: {
-            labels: product_label_lst,
-            datasets: [{
-                label: '# Số lượng đã bán',
-                data: sold_number_lst,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.4)',
-                    'rgba(54, 162, 235, 0.4)',
-                    'rgba(255, 206, 86, 0.4)',
-                    'rgba(75, 192, 192, 0.4)',
-                    'rgba(153, 102, 255, 0.4)'
-                ],
-                borderWidth: 1
-            }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 50
-                        },
-                    },
-                    x: {
-                        ticks: {
-                            maxRotation: 75,
-                            minRotation: 60
-                        }
-                    }
-                }
+                labels: cate_label_pie_lst,
+                datasets: [{
+                    label: '# Số lượng đã bán',
+                    data: cate_sold_pie_lst
+                }]
             }
         });
     </script>

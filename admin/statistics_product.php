@@ -38,7 +38,7 @@
             <?php
                 include('dbconnection.php');
                 $query = 'SELECT products.id, product_name, price, unit, sold_number, category.cate_name, sold_number*price as sale 
-                        FROM products JOIN category ON products.category_id = category.id';
+                        FROM products JOIN category ON products.category_id = category.id ORDER BY products.id';
                 $result = mysqli_query($link, $query); 
             ?>
             <?php
