@@ -42,6 +42,7 @@ call getAllBlogTitle(0);
 
 select * from blogs;
 
+call getAllProductTitle(0, 'asc', 'price', 	50, -1, '');
 drop procedure if exists getAllProductTitle;
 DELIMITER //
 CREATE PROCEDURE getAllProductTitle(IN p_offset int, IN sort_order varchar(5), IN sort_field varchar(10), IN p_price int, IN p_cate int, IN p_name varchar(50))
@@ -68,16 +69,16 @@ BEGIN
 		set price_pattern = CONCAT('price LIKE ',"'%'");
 	END IF;
         
-    IF (p_price >= 0 && p_price < 200000) THEN
+    IF (p_price >= 0 && p_price < 200) THEN
 		set price_pattern = CONCAT('price>=',
-		p_price,
+		p_price*1000,
 		' AND price<=',
-		p_price+50000);
+		p_price*1000+50000);
 	END IF;
     
-	IF (p_price >= 200000) THEN
+	IF (p_price >= 200) THEN
 		set price_pattern = CONCAT('price>=',
-		p_price);
+		p_price*1000);
     END IF;
     
 	SET @t1 =CONCAT(' SELECT id, product_name, price, image, sold_number

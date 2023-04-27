@@ -1,7 +1,16 @@
+var user_id;
+const userCookie = document.cookie
+  .split(";")
+  .find((cookie) => cookie.includes("user_id="));
+
+if (userCookie) {
+  user_id = userCookie.split("=")[1];
+} else {
+  user_id = "";
+}
+
 $.ajax({
-  url:
-    "http://localhost/dallas-organic/server/order/filterItem?id=" +
-    localStorage.getItem("user_id"),
+  url: "http://localhost/dallas-organic/server/order/filterItem?id=" + user_id,
   type: "GET",
   dataType: "json",
   success: function (orders) {

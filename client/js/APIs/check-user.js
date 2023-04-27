@@ -28,24 +28,17 @@ function setPopUpLogin() {
 }
 
 $(document).ready(function () {
-  if (localStorage.getItem("user_id") === null) {
-    $.ajax({
-      url: "http://localhost/dallas-organic/server/auth/check",
-      type: "GET",
-      success: function (response) {
-        if (response === "not set") {
-          setPopUpNotLogin();
-        } else {
-          localStorage.setItem("user_id", response);
-          setPopUpLogin();
-        }
-      },
-      error: function (xhr, status, error) {
-        console.log("Error:", error);
-      },
-    });
-  } else {
+  // setPopUpLogin();
+  const userCookie = document.cookie
+    .split(";")
+    .find((cookie) => cookie.includes("user_id="));
+
+  if (userCookie) {
+    const userId = userCookie.split("=")[1];
     setPopUpLogin();
+  } else {
+    setPopUpNotLogin();
+    console.log("Cookie 'user_id' not found.");
   }
 });
 
@@ -55,7 +48,8 @@ function logout() {
     type: "GET",
     success: function (response) {
       window.location.href = "signin.html";
-      localStorage.removeItem("user_id");
+      document.cookie =
+        "user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     },
     error: function (xhr, status, error) {
       console.log("Error:", error);

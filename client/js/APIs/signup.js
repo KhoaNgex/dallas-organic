@@ -57,7 +57,7 @@ function validateFormData(formData) {
   }
 
   // Validate phone number
-  if (formData.phone && !phonePattern.test(formData.phone)) {
+  if (!phonePattern.test(formData.phonenumber)) {
     createToast(
       "Số điện thoại chỉ gồm ký tự số và có ít nhất 10 chữ số.",
       true
