@@ -62,7 +62,7 @@ $(document).ready(function () {
       username: $("#floatingInput").val(),
       password: $("#floatingPassword").val(),
     };
-
+ 
     // Validate form data
     if (!validateFormData(formData)) {
       return;
