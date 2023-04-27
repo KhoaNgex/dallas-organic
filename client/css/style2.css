@@ -1,0 +1,78 @@
+/* ORDER HISTORY PAGE */
+.order-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.order-card {
+  box-shadow: 0px 0px 5px #cfcbcb;
+  border-radius: 10px;
+  border: none;
+  padding: 20px;
+  width: 100%;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.order-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.price-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: end;
+  gap: 5px;
+}
+
+.order-detail-container {
+  max-width: 700px;
+}
+
+.order-sum {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.order-item img {
+  width: 100px;
+}
+
+.order-item-info {
+  display: flex;
+  gap: 10px;
+}
+
+.order-item-info-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.order-price-container {
+  display: flex;
+  justify-content: end;
+}
+
+.order-price {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}

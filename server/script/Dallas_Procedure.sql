@@ -214,15 +214,14 @@ BEGIN
 END //
 DELIMITER ;
 
-select *, calculate_order_total_price(id) as total_price from orders where order
-
 
 call getOrderDetail(30);
 
+drop procedure if exists `getSpecificOrder`;
 DELIMITER //
-CREATE PROCEDURE `getUserOrder` (IN user_id INT(11))  
+CREATE PROCEDURE `getSpecificOrder` (IN order_id int)  
 BEGIN
-   select *, calculate_order_total_price(id) as total_price from orders where userid_ordcus = user_id;
+   select *, calculate_order_total_price(id) as total_price from orders where id = order_id;
 END //
 DELIMITER ;
 
