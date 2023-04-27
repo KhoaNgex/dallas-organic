@@ -135,10 +135,8 @@ function productRender(products) {
                                                 thêm</a>
                                         </small>
                                         <small class="w-50 text-center py-2">
-                                            <a class="text-body"  href="product-detail.html?id=` +
-        product.id +
-        `"><i
-                                                    class="fa fa-shopping-bag text-primary me-2"></i>Mua ngay</a>
+                                            <div class="text-body"><i
+                                                    class="fa fa-shopping-bag text-primary me-2"></i>Giao 24H</div>
                                         </small>
                                     </div>
                                 </div>
