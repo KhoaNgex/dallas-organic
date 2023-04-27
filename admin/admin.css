@@ -210,9 +210,11 @@ option {
 
 .charts {
   display: grid;
-  grid-template-columns: 2fr 3fr;
+  grid-template-columns: 5fr 4fr;
+  grid-template-rows: 1fr 1fr;
   grid-gap: 20px;
   padding: 10px 20px 30px;
+  height: 1000px;
 }
 
 .chart {
@@ -227,6 +229,7 @@ option {
   color: #808080c2;
   font-size: 20px;
   font-weight: 600;
+  margin-bottom: 20px;
 }
 
 #bar-chart {
@@ -563,4 +566,21 @@ option {
 
 .fixed-order-infor {
   border-right: 1px solid green;
+}
+
+.sale-statistics-nav {
+  margin-top: 20px;
+}
+
+.sale-statistics-nav a {
+  padding: 10px 0; 
+  width: 150px; 
+  display:inline-block; 
+  text-align: center;
+  box-shadow: 0 0 0px 2px #e1e1e1;
+}
+
+.sale-statistics-nav a:hover {
+  cursor: pointer;
+  background-color: #01640d !important;
 }

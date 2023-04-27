@@ -100,7 +100,7 @@
                                 <div class="order-product-info">
                                     <p style="font-weight: bold;"><?php echo $row["quantity"]."x"?></p>
                                     <p style="font-weight: bold; font-size: 17px;"><?php echo $row["product_name"]?></p>
-                                    <p><?php echo $total_product." vnđ"?></p>
+                                    <p><?php echo number_format($total_product)." vnđ"?></p>
                                 </div>
                                 <div class="order-product-img">
                                     <img src="<?php echo $row["image"]?>" alt="">
@@ -110,10 +110,10 @@
                         }
                         ?>
                             <div>
-                                <p style="margin-bottom: 10px;"><span style="display: inline-block; font-weight: bold; width: 130px;">Tiền hàng: </span><?php echo $order["total"]." vnđ"?></p>
-                                <p style="margin-bottom: 10px;"><span style="display: inline-block; font-weight: bold; width: 130px;">Phí giao hàng: </span><?php echo $order["ship_fee"]." vnđ"?></p>
+                                <p style="margin-bottom: 10px;"><span style="display: inline-block; font-weight: bold; width: 130px;">Tiền hàng: </span><?php echo number_format($order["total"])." vnđ"?></p>
+                                <p style="margin-bottom: 10px;"><span style="display: inline-block; font-weight: bold; width: 130px;">Phí giao hàng: </span><?php echo number_format($order["ship_fee"])." vnđ"?></p>
                                 <hr>
-                                <p style="margin-top: 10px;"><span style="display: inline-block; font-weight: bold; width: 130px;">Tổng cộng: </span><?php echo $order["total"] + $order["ship_fee"]." vnđ"?></p>
+                                <p style="margin-top: 10px;"><span style="display: inline-block; font-weight: bold; width: 130px;">Tổng cộng: </span><?php echo number_format($order["total"] + $order["ship_fee"])." vnđ"?></p>
                             </div>
                         <?php
                         mysqli_close($link);

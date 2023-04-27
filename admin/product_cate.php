@@ -65,7 +65,7 @@
                 ?>
                     <tr>
                         <td><?php echo $row["id"]?></td>
-                        <td style="width: 35%"><?php echo $row["product_name"]?></td>
+                        <td style="width: 35% ;font-weight: bold"><?php echo $row["product_name"]?></td>
                         <td><?php echo $row["cate_name"]?></td>
                         <td><?php echo $row["price"]?></td>
                         <td><?php echo $row["unit"]?></td>

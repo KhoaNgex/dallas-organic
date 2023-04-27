@@ -18,7 +18,7 @@ $.ajax({
                 userListHtml = userListHtml +
                 `<tr id=` + user.id +  `>
                     <td>` + user.id + `</td>
-                    <td>` + user.username + `</td>
+                    <td  style="font-weight: bold">` + user.username + `</td>
                     <td>` + user.fullname + `</td>
                     <td>` + user.phonenumber + `</td>
                     <td>` + user.email + `</td>

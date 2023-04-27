@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Management</title>
+    <title>Dallas Organic - Admin</title>
+    <link rel="icon" type="image/x-icon" href="https://icon-library.com/images/organic-icon-png/organic-icon-png-4.jpg">
     <link rel="stylesheet" href="admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="./assets/fonts/themify-icons-font/themify-icons/themify-icons.css">
@@ -31,7 +32,7 @@
             <button style="min-width: 40px; padding: 12px 12px; border-radius: 20px; background-color: green;"><i class="fa fa-search"></i></button>
         <table>
             <tr>
-                <th style="width: 50px;">Mã đơn hàng</th>
+                <th style="width: 50px;">ID</th>
                 <th style="width: 180px;">Họ tên người nhận</th>
                 <th>Tài khoản</th>
                 <th>Số điện thoại</th>
@@ -66,8 +67,8 @@
                     <td><?php echo $row["fullname"]?></td>
                     <td><?php echo $row["username"]?></td>
                     <td><?php echo $row["recieve_phonenum"]?></td>
-                    <td><?php echo $row["order_date"]?></td>
-                    <td><?php echo $total." vnđ"?></td>
+                    <td><?php echo date("d-m-Y", strtotime($row["order_date"]));?></td>
+                    <td><?php echo number_format($total)." vnđ"?></td>
                     <?php
                     if($row["order_status"] == "Đang chuẩn bị") {
                         echo "<td style=\"color: red\">".$row["order_status"]."</td>";
