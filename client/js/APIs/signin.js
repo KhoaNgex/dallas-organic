@@ -62,7 +62,7 @@ $(document).ready(function () {
       username: $("#floatingInput").val(),
       password: $("#floatingPassword").val(),
     };
- 
+
     // Validate form data
     if (!validateFormData(formData)) {
       return;
@@ -76,6 +76,20 @@ $(document).ready(function () {
       data: JSON.stringify(formData),
       success: function (result) {
         createToast("Đăng nhập tài khoản thành công!");
+        $.ajax({
+          url: "http://localhost/dallas-organic/server/auth/check",
+          type: "GET",
+          success: function (response) {
+            document.cookie =
+              "user_id=" + response
+             +
+              "; expires=Thu, 31 Dec 2023 23:59:59 GMT; path=/";
+          },
+          error: function (xhr, status, error) {
+            console.log("Error:", error);
+          },
+        });
+
         setTimeout(function () {
           window.location.href = "index.html";
         }, 1000);

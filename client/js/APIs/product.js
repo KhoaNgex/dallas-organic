@@ -6,6 +6,18 @@ var sort_field = "id";
 var sort_order = "asc";
 var product_count;
 
+var user_id;
+const userCookie = document.cookie
+  .split(";")
+  .find((cookie) => cookie.includes("user_id="));
+
+if (userCookie) {
+  user_id = userCookie.split("=")[1];
+} else {
+  user_id = "";
+}
+
+
 function setListAttribute() {
   sort_field = $("#sort-select").val();
   price_filter = $("input[name=price]:checked").val();
@@ -15,7 +27,6 @@ function setListAttribute() {
 }
 
 function turnCart() {
-  const quantityEle = document.querySelector("[name=quantity]");
   $.ajax({
     url: "http://localhost/dallas-organic/server/cart/createItem",
     type: "POST",
@@ -59,7 +70,7 @@ function filterProduct() {
       productRender(products);
     },
     error: function (xhr, status, error) {
-      console.log("Error:", error);
+       $("#product-list").html("Không tìm thấy sản phẩm!");
     },
   });
 }
@@ -85,7 +96,7 @@ $(document).ready(function () {
       productRender(products);
     },
     error: function (xhr, status, error) {
-      console.log("Error:", error);
+       $("#product-list").html("Không tìm thấy sản phẩm!");
     },
   });
 });

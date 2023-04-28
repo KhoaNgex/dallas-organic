@@ -1,5 +1,16 @@
 var total = 0;
 
+var user_id;
+const userCookie = document.cookie
+  .split(";")
+  .find((cookie) => cookie.includes("user_id="));
+
+if (userCookie) {
+  user_id = userCookie.split("=")[1];
+} else {
+  user_id = "";
+}
+
 var returnBtn = document.getElementById("return-btn");
 var confirmBtn = document.getElementById("confirm-btn");
 
@@ -27,7 +38,7 @@ confirmBtn.addEventListener("click", function () {
     recieve_phonenum: $("#phonenum").val(),
     note: $("#note").val(),
     ship_fee: Math.round(total * 0.1),
-    userID_ordcus: localStorage.getItem("user_id"),
+    userID_ordcus: user_id,
   };
   $.ajax({
     url: "http://localhost/dallas-organic/server/order/createItem",
@@ -90,7 +101,7 @@ $.ajax({
 $.ajax({
   url:
     "http://localhost/dallas-organic/server/cart/getAll/" +
-    localStorage.getItem("user_id"),
+    user_id,
   type: "GET",
   dataType: "json",
   success: function (products) {

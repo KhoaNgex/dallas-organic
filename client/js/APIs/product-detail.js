@@ -3,6 +3,17 @@ const id = params.get("id");
 var cate_name;
 var average_rating;
 
+var user_id;
+const userCookie = document.cookie
+  .split(";")
+  .find((cookie) => cookie.includes("user_id="));
+
+if (userCookie) {
+  user_id = userCookie.split("=")[1];
+} else {
+  user_id = "";
+}
+
 function turnCart() {
   const quantityEle = document.querySelector("[name=quantity]");
   $.ajax({
@@ -10,7 +21,7 @@ function turnCart() {
     type: "POST",
     data: JSON.stringify({
       productID: Number(id),
-      userID: Number(localStorage.getItem("user_id")),
+      userID: Number(user_id),
       quantity: Number(quantityEle.value),
     }),
     contentType: "application/json",
@@ -27,7 +38,7 @@ function turnCart() {
 function postReview() {
   var FormData = {
     productID: Number(id),
-    customerID: Number(localStorage.getItem("user_id")),
+    customerID: Number(user_id),
     comment: $("#message").val(),
     rating: $("#point").val(),
   };

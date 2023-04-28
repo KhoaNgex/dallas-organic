@@ -1,3 +1,13 @@
+var user_id;
+const userCookie = document.cookie
+  .split(";")
+  .find((cookie) => cookie.includes("user_id="));
+if (userCookie) {
+  user_id = userCookie.split("=")[1];
+} else {
+  user_id = "";
+}
+
 const createToast = (msg, errsta = false) => {
   if (errsta) {
     document.getElementById("toast-container").style =
@@ -15,9 +25,7 @@ const createToast = (msg, errsta = false) => {
 
 $(document).ready(function () {
   $.ajax({
-    url:
-      "http://localhost/dallas-organic/server/user/getItem/" +
-      localStorage.getItem("user_id"),
+    url: "http://localhost/dallas-organic/server/user/getItem/" + user_id,
     type: "GET",
     dataType: "json",
     success: function (infos) {
@@ -117,7 +125,7 @@ $(document).ready(function () {
           $.ajax({
             url:
               "http://localhost/dallas-organic/server/user/editItem?id=" +
-              localStorage.getItem("user_id"),
+              user_id,
             type: "PUT",
             data: JSON.stringify(formData),
             contentType: "application/json",
@@ -146,7 +154,7 @@ $(document).ready(function () {
             $.ajax({
               url:
                 "http://localhost/dallas-organic/server/user/editItem?id=" +
-                localStorage.getItem("user_id"),
+                user_id,
               type: "PUT",
               data: JSON.stringify({ avatar: new_path }),
               contentType: "application/json",
@@ -193,9 +201,7 @@ $("#upd-pass-btn").click(function (e) {
     );
   } else {
     $.ajax({
-      url:
-        "http://localhost/dallas-organic/server/user/editItem?id=" +
-        localStorage.getItem("user_id"),
+      url: "http://localhost/dallas-organic/server/user/editItem?id=" + user_id,
       type: "PUT",
       data: JSON.stringify({ password: pass }),
       contentType: "application/json",

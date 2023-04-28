@@ -1,12 +1,21 @@
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 var fullname = "";
+var user_id;
+const userCookie = document.cookie
+  .split(";")
+  .find((cookie) => cookie.includes("user_id="));
 
+if (userCookie) {
+  user_id = userCookie.split("=")[1];
+} else {
+  user_id = "";
+}
 $(document).ready(function () {
   $.ajax({
     url:
       "http://localhost/dallas-organic/server/user/getItem/" +
-      localStorage.getItem("user_id"),
+      user_id,
     type: "GET",
     dataType: "json",
     success: function (infos) {
