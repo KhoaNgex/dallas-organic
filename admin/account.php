@@ -19,8 +19,8 @@
         <div class="main-content main-content-order">
             <h2>Quản lý Tài khoản</h2>
             <a href="account_add.php"><button style="background-color: #3cba3c; margin-top: 20px; padding: 15px 20px;">Thêm tài khoản</button></a>
-            <input type="text" placeholder="Tìm kiếm">
-            <button style="min-width: 40px; padding: 12px 12px; border-radius: 20px; background-color: green;"><i class="fa fa-search"></i></button>
+            <!-- <input type="text" placeholder="Tìm kiếm">
+            <button style="min-width: 40px; padding: 12px 12px; border-radius: 20px; background-color: green;"><i class="fa fa-search"></i></button> -->
             <table id="user-list">
             </table>
             

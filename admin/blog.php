@@ -19,8 +19,8 @@
         <div class="main-content main-content-order">
             <h2>Quản lý Blog</h2>
             <a href="blog_add.php"><button style="background-color: #3cba3c; margin-top: 20px; padding: 15px 20px;">Thêm Blog</button></a>
-            <input style="margin: 20px 0 0 0;" type="text" placeholder="Tìm kiếm">
-            <button style="min-width: 40px; padding: 12px 12px; border-radius: 20px; background-color: green;"><i class="fa fa-search"></i></button>
+            <!-- <input style="margin: 20px 0 0 0;" type="text" placeholder="Tìm kiếm">
+            <button style="min-width: 40px; padding: 12px 12px; border-radius: 20px; background-color: green;"><i class="fa fa-search"></i></button> -->
         <table>
             <tr>
                 <th>ID</th>

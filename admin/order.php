@@ -28,8 +28,8 @@
         ?>
         <div class="main-content main-content-order">
             <h2>Quản lý Đơn hàng</h2>
-            <input style="margin: 20px 0 0 0;" type="text" placeholder="Tìm kiếm">
-            <button style="min-width: 40px; padding: 12px 12px; border-radius: 20px; background-color: green;"><i class="fa fa-search"></i></button>
+            <!-- <input style="margin: 20px 0 0 0;" type="text" placeholder="Tìm kiếm">
+            <button style="min-width: 40px; padding: 12px 12px; border-radius: 20px; background-color: green;"><i class="fa fa-search"></i></button> -->
         <table>
             <tr>
                 <th style="width: 50px;">ID</th>

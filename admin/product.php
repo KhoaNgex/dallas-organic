@@ -28,9 +28,9 @@
             <a href="product_add.php"><button
                     style="background-color: #3cba3c; margin-top: 20px; padding: 15px 20px;">Thêm sản
                     phẩm</button></a>
-            <input type="text" placeholder="Tìm kiếm">
+            <!-- <input type="text" placeholder="Tìm kiếm">
             <button style="min-width: 40px; padding: 12px 12px; border-radius: 20px; background-color: green;"><i
-                    class="fa fa-search"></i></button>
+                    class="fa fa-search"></i></button> -->
 
             <div style="display: inline-block;">
                 <select name="cate" id="cate" style="width: 200px;">
