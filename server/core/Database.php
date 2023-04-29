@@ -1,7 +1,7 @@
 <?php
 
 trait Database
-{
+{ 
  
 	private function connect()
 	{
@@ -12,7 +12,7 @@ trait Database
 		$con = new PDO($string, DBUSER, DBPASS);
 		return $con;
 	}
-
+ 
 	public function query($query, $data = [])
 	{
 		$con = $this->connect();

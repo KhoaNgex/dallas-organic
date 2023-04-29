@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1:3307
--- Thời gian đã tạo: Th4 27, 2023 lúc 06:24 PM
+-- Thời gian đã tạo: Th4 28, 2023 lúc 08:54 AM
 -- Phiên bản máy phục vụ: 10.4.27-MariaDB
 -- Phiên bản PHP: 8.2.0
 
@@ -87,16 +87,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllProductTitle` (IN `p_offset` 
 		set price_pattern = CONCAT('price LIKE ',"'%'");
 	END IF;
         
-    IF (p_price >= 0 && p_price < 200000) THEN
+    IF (p_price >= 0 && p_price < 200) THEN
 		set price_pattern = CONCAT('price>=',
-		p_price,
+		p_price*1000,
 		' AND price<=',
-		p_price+50000);
+		p_price*1000+50000);
 	END IF;
     
-	IF (p_price >= 200000) THEN
+	IF (p_price >= 200) THEN
 		set price_pattern = CONCAT('price>=',
-		p_price);
+		p_price*1000);
     END IF;
     
 	SET @t1 =CONCAT(' SELECT id, product_name, price, image, sold_number
@@ -452,9 +452,12 @@ INSERT INTO `cart` (`userID`, `productID`, `quantity`) VALUES
 (1, 4, 5),
 (1, 5, 4),
 (1, 7, 3),
-(30, 9, 1),
-(30, 13, 1),
-(30, 23, 1);
+(30, 13, 5),
+(30, 18, 3),
+(30, 23, 5),
+(33, 2, 2),
+(36, 3, 5),
+(39, 2, 4);
 
 -- --------------------------------------------------------
 
@@ -498,7 +501,10 @@ INSERT INTO `customer_account` (`userID_customer`) VALUES
 (3),
 (5),
 (30),
-(32);
+(33),
+(36),
+(38),
+(39);
 
 -- --------------------------------------------------------
 
@@ -520,9 +526,14 @@ CREATE TABLE `feedback` (
 
 INSERT INTO `feedback` (`productID`, `customerID`, `comment`, `rating`, `feedback_datetime`) VALUES
 (1, 30, 'Cà rốt ngon lắm anh chị ơi', 5, '2023-04-26 18:19:10'),
+(1, 33, 'Cà rốt cũng được', 3, '2023-04-28 03:53:10'),
 (2, 30, 'Táo không tươi lắm, nhưng tổng thể vẫn ăn được', 3, '2023-04-27 12:27:37'),
+(2, 36, 'chê', 1, '2023-04-28 03:57:57'),
+(3, 30, 'Bưởi dở quá', 2, '2023-04-28 02:21:17'),
+(3, 36, 'Bưởi ngon lắm', 5, '2023-04-28 04:43:42'),
 (5, 1, 'Dâu đợt này không tươi', 3, '2023-04-09 21:30:00'),
 (5, 3, 'Dâu tươi ngon', 5, '2023-03-20 14:00:09'),
+(18, 30, 'Bánh ngon', 5, '2023-04-28 12:23:56'),
 (23, 3, 'Sản phẩm cực kì tuyệt vời, gia đình chúng tôi rất hài lòng!', 5, '2023-03-20 13:00:21');
 
 -- --------------------------------------------------------
@@ -552,6 +563,8 @@ INSERT INTO `ordered_product` (`productID`, `orderID`, `quantity`) VALUES
 (2, 5, 3),
 (2, 30, 3),
 (2, 39, 7),
+(2, 45, 2),
+(2, 47, 4),
 (3, 1, 2),
 (3, 2, 2),
 (3, 3, 2),
@@ -560,6 +573,7 @@ INSERT INTO `ordered_product` (`productID`, `orderID`, `quantity`) VALUES
 (3, 41, 2),
 (3, 42, 2),
 (3, 43, 1),
+(3, 46, 5),
 (4, 2, 5),
 (4, 3, 5),
 (4, 4, 5),
@@ -573,9 +587,12 @@ INSERT INTO `ordered_product` (`productID`, `orderID`, `quantity`) VALUES
 (12, 30, 7),
 (12, 39, 2),
 (13, 44, 1),
+(13, 48, 5),
+(18, 48, 3),
 (23, 42, 2),
 (23, 43, 1),
 (23, 44, 1),
+(23, 48, 5),
 (35, 42, 2);
 
 -- --------------------------------------------------------
@@ -600,18 +617,22 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `recieve_address`, `recieve_phonenum`, `note`, `order_date`, `order_status`, `ship_fee`, `userID_ordcus`) VALUES
-(1, '175 Trương Định, Phường 9, Quận 3, TPHCM', 908402431, 'giao trước 19h', '2023-12-20', 'Đang chuẩn bị', 15000, 1),
-(2, '89 Trương Định, Phường 9, Quận 3, TPHCM', 908402431, 'giao trước 19h', '2023-11-09', 'Đang chuẩn bị', 15000, 1),
-(3, '89 Trương Định, Phường 9, Quận 3, TPHCM', 908402431, 'giao trước 19h', '2023-10-09', 'Đang chuẩn bị', 15000, 1),
-(4, '89 Trương Định, Phường 9, Quận 3, TPHCM', 908402431, 'giao trước 19h', '2023-09-09', 'Đang chuẩn bị', 15000, 1),
-(5, '89 Trương Định, Phường 9, Quận 3, TPHCM', 908402431, 'giao trước 19h', '2023-08-09', 'Đang chuẩn bị', 15000, 1),
-(30, 'KTX Khu A ĐHQG HCM', 926878567, 'chồng tôi nhận', '2023-07-26', 'Đang chuẩn bị', 230200, 30),
-(39, 'KTX Khu A ĐHQG HCM', 926878567, '', '2023-06-27', 'Đang giao hàng', 163800, 30),
-(40, 'KTX Khu A ĐHQG HCM', 926878567, 'giao trước 10h tối', '2023-05-27', 'Đang chuẩn bị', 43500, 30),
-(41, 'KTX Khu A ĐHQG HCM', 926878567, '', '2023-04-27', 'Đang chuẩn bị', 29100, 30),
-(42, 'KTX Khu A ĐHQG HCM', 926878567, '', '2023-03-27', 'Đang chuẩn bị', 129800, 30),
-(43, 'KTX Khu A ĐHQG HCM', 926878567, '', '2023-02-27', 'Đang chuẩn bị', 32425, 30),
-(44, 'KTX Khu A ĐHQG HCM', 926878567, 'không có ghi chú gì hết', '2023-01-27', 'Đang chuẩn bị', 32160, 30);
+(1, '175 Trương Định, Phường 9, Quận 3, TPHCM', 908402431, 'giao trước 19h', '2023-12-20', 'Hoàn thành', 15000, 1),
+(2, '89 Trương Định, Phường 9, Quận 3, TPHCM', 908402431, 'giao trước 19h', '2023-11-09', 'Hoàn thành', 15000, 1),
+(3, '89 Trương Định, Phường 9, Quận 3, TPHCM', 908402431, 'giao trước 19h', '2023-10-09', 'Hoàn thành', 15000, 1),
+(4, '89 Trương Định, Phường 9, Quận 3, TPHCM', 908402431, 'giao trước 19h', '2023-09-09', 'Hoàn thành', 15000, 1),
+(5, '89 Trương Định, Phường 9, Quận 3, TPHCM', 908402431, 'giao trước 19h', '2023-08-09', 'Hoàn thành', 15000, 1),
+(30, 'KTX Khu A ĐHQG HCM', 926878567, 'chồng tôi nhận', '2023-07-26', 'Hoàn thành', 230200, 30),
+(39, 'KTX Khu A ĐHQG HCM', 926878567, '', '2023-06-27', 'Hoàn thành', 163800, 30),
+(40, 'KTX Khu A ĐHQG HCM', 926878567, 'giao trước 10h tối', '2023-05-27', 'Hoàn thành', 43500, 30),
+(41, 'KTX Khu A ĐHQG HCM', 926878567, '', '2023-04-27', 'Hoàn thành', 29100, 30),
+(42, 'KTX Khu A ĐHQG HCM', 926878567, '', '2023-03-27', 'Hoàn thành', 129800, 30),
+(43, 'KTX Khu A ĐHQG HCM', 926878567, '', '2023-02-27', 'Hoàn thành', 32425, 30),
+(44, 'KTX Khu A ĐHQG HCM', 926878567, 'không có ghi chú gì hết', '2023-01-27', 'Hoàn thành', 32160, 30),
+(45, 'Phòng 25.16, Bcons Garden, Phố Lý Thường Kiệt, Phường Dĩ An, Dĩ An, Bình Dương', 962646979, '', '2023-04-28', 'Hoàn thành', 20000, 33),
+(46, 'Chung cư Bcons Miền Đông, 69 Tân Lập', 962646979, 'giao hàng trước 17h tối', '2023-04-28', 'Hoàn thành', 29500, 36),
+(47, 'Chung cư Bcons Miền Đông, 69 Tân Lập', 962646979, 'Giao trước 12h trưa', '2023-04-28', 'Hoàn thành', 40000, 39),
+(48, 'KTX Khu A ĐHQG HCM', 926878567, 'giao trước 12 h', '2023-04-28', 'Đang chuẩn bị', 196475, 30);
 
 -- --------------------------------------------------------
 
@@ -637,9 +658,9 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `product_name`, `price`, `unit`, `description`, `origin`, `sold_number`, `remain_number`, `image`, `category_id`) VALUES
-(1, 'Cà rốt', 42000, 'kg', 'Cà rốt là thực phẩm không thể thiếu đối với căn bếp của gia đình bạn, trong cà rốt có hàm lượng dinh dưỡng dồi dào và  đặc biệt rất tốt cho mắt. Chúng tôi mang cà rốt đến từ Đà Lạt với chất lượng vượt trội, sạch và không sử dụng thuốc hóa học đến với người tiêu dùng, sản phẩm có nguồn gốc rõ ràng do chính các hộ nộng dân Đà Lạt vun trồng, vậy nên quý khách hàng sẽ an tâm hơn khi mua hàng tại Dallas Organic.', 'Đà Lạt, Việt Nam', 215, 385, 'https://bizweb.dktcdn.net/100/437/874/products/50395098-036e-45bc-bb4c-9dbe31704930.jpg?v=1645611457', 1),
-(2, 'Táo đỏ Mỹ', 100000, 'kg', 'Táo đỏ là trái cây nhập khẩu 100% từ Mỹ đạt tiêu chuẩn xuất khẩu toàn cầu. Táo đỏ được bảo quản tươi ngon đến tận tay khách hàng. Táo ngon nhất khi có màu đậm, trái chắc, không bị mềm. Táo có thịt trắng, thơm, khi chín ít bột, giòn nhẹ, ngọt thanh, nhiều nước.', 'Mỹ', 231, 49, 'https://product.hstatic.net/1000301274/product/tao-envy-my-size-64-88_dbcc53a439b44ae393543b650e0412a6.png', 2),
-(3, 'Bưởi da xanh túi lưới', 59000, 'trái', 'Bưởi là một loại thực phẩm vô cùng lành mạnh để đưa vào chế độ ăn uống. Phần ruột màu hồng trắng với các tép mọng nước vô cùng hấp dẫn. Trái có vị ngọt, bưởi hái xuống để càng lâu độ ngọt càng cao.', 'Việt Nam', 85, 35, 'https://product.hstatic.net/1000141988/product/buoi_da_xanh_loai_1_tui_luoi_6c8bedf2099f4aba9b8537d343caf55f_large_030b93dffd764b0c9c9abec096534c6a_large.jpg', 2),
+(1, 'Cà rốt', 60000, 'kg', 'Cà rốt là thực phẩm không thể thiếu đối với căn bếp của gia đình bạn, trong cà rốt có hàm lượng dinh dưỡng dồi dào và  đặc biệt rất tốt cho mắt. Chúng tôi mang cà rốt đến từ Đà Lạt với chất lượng vượt trội, sạch và không sử dụng thuốc hóa học đến với người tiêu dùng, sản phẩm có nguồn gốc rõ ràng do chính các hộ nộng dân Đà Lạt vun trồng, vậy nên quý khách hàng sẽ an tâm hơn khi mua hàng tại Dallas Organic.', 'Đà Lạt, Việt Nam', 215, 385, 'https://bizweb.dktcdn.net/100/437/874/products/50395098-036e-45bc-bb4c-9dbe31704930.jpg?v=1645611457', 1),
+(2, 'Táo đỏ Mỹ', 100000, 'kg', 'Táo đỏ là trái cây nhập khẩu 100% từ Mỹ đạt tiêu chuẩn xuất khẩu toàn cầu. Táo đỏ được bảo quản tươi ngon đến tận tay khách hàng. Táo ngon nhất khi có màu đậm, trái chắc, không bị mềm. Táo có thịt trắng, thơm, khi chín ít bột, giòn nhẹ, ngọt thanh, nhiều nước.', 'Mỹ', 237, 43, 'https://product.hstatic.net/1000301274/product/tao-envy-my-size-64-88_dbcc53a439b44ae393543b650e0412a6.png', 2),
+(3, 'Bưởi da xanh túi lưới', 59000, 'trái', 'Bưởi là một loại thực phẩm vô cùng lành mạnh để đưa vào chế độ ăn uống. Phần ruột màu hồng trắng với các tép mọng nước vô cùng hấp dẫn. Trái có vị ngọt, bưởi hái xuống để càng lâu độ ngọt càng cao.', 'Việt Nam', 90, 30, 'https://product.hstatic.net/1000141988/product/buoi_da_xanh_loai_1_tui_luoi_6c8bedf2099f4aba9b8537d343caf55f_large_030b93dffd764b0c9c9abec096534c6a_large.jpg', 2),
 (4, 'Dưa lưới giòn', 89000, 'trái', 'Trái có bề ngoài hình bầu dục, trái non màu xanh khi chín chuyển sang màu vàng rất bắt mắt và có vân lưới nhẹ. Thịt dày màu vàng cam, có hương thơm đặc trưng, có độ ngọt cao nhất, giòn, nhiều nước chứ không giòn khô như khác loại dưa lưới thông thường.\r\nTrọng lượng: 1.2kg-1.8kg/trái.', 'Việt Nam', 90, 22, 'https://citifruit.com/uploads/images/Products/60/Dua-Luoi-Vang-800%C3%97800.jpg', 2),
 (5, 'Dâu Hàn Quốc', 219000, 'hộp 250G', 'Dâu tây Hàn Quốc chinh phục khách hàng bởi hương thơm tự nhiên, vị ngọt thanh, \"Ngoại hình\" đỏ au bắt mắt, nguyên cuống xanh tươi. Đóng gói với trọng lượng 250g, tiện lợi cho việc sử dụng và bảo quản. Dâu cũng được xem như \"người bạn\" sắc đẹp, hỗ trợ ngăn ngừa và xóa mờ các nếp nhăn.', 'Hàn Quốc', 43, 37, 'https://product.hstatic.net/1000141988/product/dau_hq_250g_3c3502ff0b144807aa9353ab44564515_1024x1024.jpg', 2),
 (6, 'Quýt Úc', 129000, 'kg', 'Quýt được nhập khẩu từ Úc với vị ngọt xen chút chua, tép thịt căng mọng, không bị sượng và rất nhiều nước. Quýt chứa nhiều vitamin tốt cho da, giúp phục hồi sức khỏe nhanh.', 'Úc', 55, 12, 'https://product.hstatic.net/1000141988/product/quyt_uc___moi____2__b59051e032d64624ad538b8021f8f9d1_1024x1024.jpg', 2),
@@ -649,17 +670,17 @@ INSERT INTO `products` (`id`, `product_name`, `price`, `unit`, `description`, `o
 (10, 'Dưa leo VietGAP', 19500, 'vỉ 500G', 'Dưa Leo An Toàn VietGap là một loại rau ăn quả quen thuộc đối với người Việt Nam. Dưa leo rất mát, giòn, ngon ngọt, thơm hấp dẫn. Với mô hình nông trại khép kín và theo tiêu chuẩn nuôi trông khắt khe. Dưa leo có vị ngọt, thanh mát tự nhiên. Được dùng để ăn sống, làm nước ép và nấu canh.', 'Việt Nam', 225, 150, 'https://product.hstatic.net/1000141988/product/dua_leo_vietgap_be1076cb7a364db4861b8061015d3c76_grande.jpg', 1),
 (11, 'Cải xoăn Kale hữu cơ Food King', 44000, 'túi 250G', 'Cải Xoăn Kale Hữu Cơ Food King (250G) là một loại rau xanh rất giàu dinh dưỡng chứa nhiều chất dinh dưỡng và khoáng chất có lợi cho sức khỏe. Cải xoăn Kale là loại thực phẩm tuyệt vời để cải thiện quá trình tiêu hóa, trị táo bón, huyết áp… nhờ hàm lượng chất xơ cao. Đây là sự lựa chọn hoàn hảo để làm những món canh hoặc xào hoặc ép nước cho cả gia đình cùng thưởng thức. \r\nCải xoăn Kale có màu xanh sẫm, thuộc gia đình họ cải và được đánh giá là một trong những loại rau có giá trị dinh dưỡng cao, mang lại nhiều lợi ích cho sức khỏe như: vitamin A, vitamin C và vitamin K, chất xơ. Ngoài ra, cải xoăn Kale còn chứa nhiều chất khoáng cần thiết cho sức khỏe như folate, sắt, canxi, kali, mangan và phốt pho giúp tăng cường hệ miễn dịch, tăng cường chiều cao của trẻ nhỏ, đồng thời cũng chống loãng xương ở người cao tuổi. Vitamin K trong cải xoăn giúp giảm quầng thâm dưới mắt và se lỗ chân lông trên da làm giảm các nếp nhăn. Hơn nữa, nó cũng giúp giảm sưng và vết sẹo có thể hình thành. ', 'Việt Nam', 120, 80, 'https://product.hstatic.net/1000141988/product/website_-_thuong__36__9834c08dbbe84b75bb47495c52ffc37c_1024x1024.jpg', 1),
 (12, 'Cải ngọt hữu cơ USDA Food King', 70000, 'túi 250G', 'Cải Ngọt Hữu Cơ Food King (250G) là loại rau thuộc họ Cải, rất dễ ăn và giàu chất dinh dưỡng. Cải ngọt ăn giòn và có vị ngọt nhẹ, thường dùng trong món luộc, xào, nấu canh hoặc ăn lẩu. Sản phẩm đạt chuẩn hữu cơ USDA, đem đến cho bạn một loại thực phẩm an toàn và tốt cho sức khỏe. Ăn cải ngọt giúp ngăn ngừa ung thư gan, hỗ trợ tiêu hóa, tốt cho gan. Rau có vị ngọt tự nhiên, dễ bảo quản và chế biến, phù hợp để luộc, xào, nấu canh hoặc ăn lẩu.', 'Việt Nam', 452, 2956, 'https://product.hstatic.net/1000141988/product/website_-_thuong_7c25f47c56154b2fb18509aabc071770_1024x1024.jpg', 1),
-(13, 'Hành tây hữu cơ USDA Food King', 56350, 'túi 350G', 'Hành Tây Hữu Cơ Food King thuộc cây thảo, họ hành, có tên khoa học là Allium cepa. Hành tây có vị cay nồng và là thực phẩm thông dụng trong bữa ăn gia đình Việt. Sau khi chế biến, hành tây sẽ cho ra vị ngọt tự nhiên, làm tăng hương vị cho các thực phẩm chế biến đi kèm.\r\nTrong hành tây rất giàu vitamin A, B, C. Ngoài ra, đây còn là một nguồn tiềm năng của các chất acid folic, canxi, phốt pho, magiê, crom, sắt, chất xơ, kali và selen. Chất prostaglandin (prostagladin A, PG) cùng fibrin trong hành giúp giảm huyết áp và chống lại những chất gây tăng áp trong cơ thể. Bên cạnh đó,  hành tây có tác dụng chống oxy hoá rất mạnh và khử các gốc tự do nhờ hai hoạt chất là selen và quercetin. Theo nhiều nghiên cứu cho thấy hành tây có thể giúp tăng mật độ xương, tốt cho phụ nữ mãn kinh. Hành có tác dụng diệt vi khuẩn lây nhiễm, bao gồm cả vi khuẩn E. coli và Salmonella.', 'Việt Nam', 131, 62, 'https://product.hstatic.net/1000141988/product/website_-_thuong__43__dd86a026daa84ad980560fd18bca4661_1024x1024.jpg', 1),
+(13, 'Hành tây hữu cơ USDA Food King', 56350, 'túi 350G', 'Hành Tây Hữu Cơ Food King thuộc cây thảo, họ hành, có tên khoa học là Allium cepa. Hành tây có vị cay nồng và là thực phẩm thông dụng trong bữa ăn gia đình Việt. Sau khi chế biến, hành tây sẽ cho ra vị ngọt tự nhiên, làm tăng hương vị cho các thực phẩm chế biến đi kèm.\r\nTrong hành tây rất giàu vitamin A, B, C. Ngoài ra, đây còn là một nguồn tiềm năng của các chất acid folic, canxi, phốt pho, magiê, crom, sắt, chất xơ, kali và selen. Chất prostaglandin (prostagladin A, PG) cùng fibrin trong hành giúp giảm huyết áp và chống lại những chất gây tăng áp trong cơ thể. Bên cạnh đó,  hành tây có tác dụng chống oxy hoá rất mạnh và khử các gốc tự do nhờ hai hoạt chất là selen và quercetin. Theo nhiều nghiên cứu cho thấy hành tây có thể giúp tăng mật độ xương, tốt cho phụ nữ mãn kinh. Hành có tác dụng diệt vi khuẩn lây nhiễm, bao gồm cả vi khuẩn E. coli và Salmonella.', 'Việt Nam', 136, 57, 'https://product.hstatic.net/1000141988/product/website_-_thuong__43__dd86a026daa84ad980560fd18bca4661_1024x1024.jpg', 1),
 (14, 'Đậu cove hữu cơ USDA Food King', 35000, 'vỉ 250G', 'Đậu Cove Hữu Cơ Food King có tên khoa học là Phaseolus vulgaris. Đậu cove chứa rất ít calo, không chứa chất béo bão hòa mà rất giàu vitamin, khoáng chất và vi chất dinh dưỡng thực vật. Ngoài ra, đậu cove tươi còn có lợi ích đáng kể với sức khỏe người dùng. Sản phẩm được trồng không sử dụng thuốc bảo vệ thực vật. Tính ôn, có tác dụng nhuận tràng, bồi bổ nguyên khí. Thích hợp với những người bị bệnh tim, thận, cao huyết áp. Có thể luộc, làm salad, gỏi hoặc xào đều rất ngon.', 'Việt Nam', 95, 255, 'https://product.hstatic.net/1000141988/product/website_-_thuong__1__00d0f6f953d5424a9e7e6518ab490576_1024x1024.jpg', 1),
 (15, 'Bột nêm rau củ hữu cơ Sottolestelle', 105000, 'hộp 100G', 'Bột nêm dưới dạng viên nén dễ hòa tan, giúp rút ngắn thời gian hầm rau củ quả như thông thường mà vẫn cho nước dùng màu sắc tự nhiên với mùi thơm tự nhiên như nước hầm nấu kĩ.\r\nBột nêm rau củ với công nghệ sấy của Sottolestelle và bí quyết chế biến độc đáo giúp bảo toàn được chất xơ, khoáng chất trong mỗi nguyên liệu, không chỉ an toàn, thuần vị tự nhiên mà còn giúp cho bữa ăn của gia đình bạn thêm an lành, tròn vị.\r\nThành phần: Muối, đường nâu, bột rau củ 13,3% (hành tây, cần tây, cà rốt, cà chua, rau bina, rau mùi tây), tinh bột ngô, dầu hướng dương, chiết xuất men, bột nghệ 1%.\r\nSản phẩm dùng làm canh, soup, nước lẩu ngon ngọt tự nhiên mà không cần ninh rau củ; dùng nêm, nếm, tẩm ướp, xào nấu, gia vị chấm các món ăn, bất kể là món chay hay măn, giúp món thịt có thêm chất sơ lợi tiêu hóa.', 'Sottolestelle, Ý', 99, 101, 'https://product.hstatic.net/200000423303/product/bot-nem-rau-cu-huu-co-sotto-1-500x500_3ac6bc9999ff48c2b29480077ac85160.jpg', 3),
 (16, 'Ngũ cốc chocoball hữu cơ Bauckhof', 189000, 'túi', '', 'Đức', 35, 55, 'https://product.hstatic.net/200000423303/product/ngu-coc-chocoball-huu-co-bauckhof-300g_25bf85d75c364c94a1887d77f2d24e29_grande.png', 3),
 (17, 'Bánh ngũ cốc thanh Annie\'s organic', 186000, 'hộp 151G', 'Bánh ngũ cốc Annie’s Organic Chewy Granola Bars Peanut Butter Chocolate Chip Hộp 151g gồm có 6 thanh x 25g/thanh.\r\nVị sô cô la và hoàn hảo để mang theo bên bạn mọi lúc mọi nơi, những thanh ngũ cốc Annie’s Chocolate Chip Chewy Granola chứa đầy hương vị thơm ngon mà trẻ em và người lớn đều yêu thích. Được tạo ra với hương vị thơm ngon và kết cấu dai, món ăn nhẹ này được chứng nhận hữu cơ và được đóng gói mỗi thanh với 9 gam ngũ cốc nguyên cám.\r\n\r\nNhững thanh granola này là một lựa chọn lành mạnh cho cả gia đình ăn vặt bất cứ khi nào bạn muốn. Hãy mang theo những thanh ngũ cốc hấp dẫn để bữa sáng thêm thú vị, hoặc dùng vào bữa ăn nhẹ. Annie’s sản xuất các sản phẩm thuộc hơn 20 danh mục phù hợp với gia đình – từ đồ ăn nhẹ có hương vị trái cây và ngũ cốc đến pho mát.', 'Mỹ', 35, 65, 'https://product.hstatic.net/200000423303/product/banh_ngu_coc_thanh_annie_s_organic_chewy_ganola_bars_151g_f2ae2725d99346989f20319c97771cb6_grande.png', 3),
-(18, 'Bánh ngũ cốc Chocolate chip', 186000, 'hộp 151G', 'Bánh ngũ cốc Annie’s Organic Chewy Granola Bars, Chocolate Chip Hộp 151g gồm có 6 thanh x 25g/thanh.\r\nVị sô cô la và hoàn hảo để mang theo bên bạn mọi lúc mọi nơi, những thanh ngũ cốc Annie’s Chocolate Chip Chewy Granola chứa đầy hương vị thơm ngon mà trẻ em và người lớn đều yêu thích. Được tạo ra với hương vị thơm ngon và kết cấu dai, món ăn nhẹ này được chứng nhận hữu cơ và được đóng gói mỗi thanh với 9 gam ngũ cốc nguyên cám.\r\n\r\nNhững thanh granola này là một lựa chọn lành mạnh cho cả gia đình ăn vặt bất cứ khi nào bạn muốn. Hãy mang theo những thanh ngũ cốc hấp dẫn để bữa sáng thêm thú vị, hoặc dùng vào bữa ăn nhẹ. Annie’s sản xuất các sản phẩm thuộc hơn 20 danh mục phù hợp với gia đình – từ đồ ăn nhẹ có hương vị trái cây và ngũ cốc đến pho mát.', 'Mỹ', 44, 56, 'https://product.hstatic.net/200000423303/product/h_ngu_coc_thanh_annie_s_organic_chewy_ganola_bars__chocolate_chip_151g_6191539d523e4d1e9e152cc629c32b3e_grande.png', 3),
+(18, 'Bánh ngũ cốc Chocolate chip', 186000, 'hộp 151G', 'Bánh ngũ cốc Annie’s Organic Chewy Granola Bars, Chocolate Chip Hộp 151g gồm có 6 thanh x 25g/thanh.\r\nVị sô cô la và hoàn hảo để mang theo bên bạn mọi lúc mọi nơi, những thanh ngũ cốc Annie’s Chocolate Chip Chewy Granola chứa đầy hương vị thơm ngon mà trẻ em và người lớn đều yêu thích. Được tạo ra với hương vị thơm ngon và kết cấu dai, món ăn nhẹ này được chứng nhận hữu cơ và được đóng gói mỗi thanh với 9 gam ngũ cốc nguyên cám.\r\n\r\nNhững thanh granola này là một lựa chọn lành mạnh cho cả gia đình ăn vặt bất cứ khi nào bạn muốn. Hãy mang theo những thanh ngũ cốc hấp dẫn để bữa sáng thêm thú vị, hoặc dùng vào bữa ăn nhẹ. Annie’s sản xuất các sản phẩm thuộc hơn 20 danh mục phù hợp với gia đình – từ đồ ăn nhẹ có hương vị trái cây và ngũ cốc đến pho mát.', 'Mỹ', 47, 53, 'https://product.hstatic.net/200000423303/product/h_ngu_coc_thanh_annie_s_organic_chewy_ganola_bars__chocolate_chip_151g_6191539d523e4d1e9e152cc629c32b3e_grande.png', 3),
 (19, 'Bánh gạo lứt Homnin hữu cơ Lumlum', 89000, 'hộp 100G', '', 'Thái Lan', 120, 110, 'https://product.hstatic.net/200000423303/product/banh_gao_luc_homnin_huu_co_lumlum_9bce676b87df45bf8000db6d9fe10797_grande.jpg', 3),
 (20, ' Bánh gạo lứt Jasmine hữu cơ Lumlum', 89000, 'hộp 100G', '', 'Thái Lan', 86, 102, 'https://product.hstatic.net/200000423303/product/banh_gao_lut_jasmine_huu_co_100g_lumlum_-_100g_74293317eacf4ca29790030a561bbf94_grande.jpg', 3),
 (21, 'Bánh quy hạt kê hữu cơ cho bé Sottolestelle', 149000, 'túi 250G', '', 'Sottolestelle, Ý', 19, 101, 'https://product.hstatic.net/200000423303/product/banh_qui_hat_ke_huu_co_cho_be_sottolestelle_250g_64ff0445f8e744d7922d3372d9735f90_grande.jpg', 3),
 (22, ' Bánh hỏi hữu cơ Bích Chi', 40000, 'hộp 200G', 'Thành phần Gạo hữu cơ 100%.\r\nCách dùng:\r\n- Chế nước sôi vào cho ngập bánh hỏi.\r\n- Đậy kín lại khoảng 1.5 - 2 phút.\r\n- Vớt ra để ráo rồi dùng ngay.\r\n- Hoặc ngâm bánh hỏi trong nước ấm khoảng 2 phút. Hấp khoảng 4 - 5 phút.\r\nLưu ý - phải thoa dầu vô xửng hấp', 'Việt Nam', 101, 59, 'https://product.hstatic.net/200000423303/product/banh_hoi_huu_co_bich_chi_519aa91d028c4c248ab6d126f317bde8_grande.jpg', 3),
-(23, 'Ba chỉ bò Obe hữu cơ', 225000, 'vỉ 300G', 'Nếu cuối tuần muốn đổi gió hoặc bạn là một người sành ăn thì không nên bỏ qua thịt bò hữu cơ OBE nhé! \r\n- 100% Bò OBE không sử dụng thuốc kháng sinh, hóc môn tăng trưởng.\r\n- Giống bò chất lượng ngon nhất, không biến đổi gene, không sử dụng các chất kích thích.\r\n- Bò ăn mềm, ngọt, thơm, ngậy béo....ĐẬM ĐÀ một cách tự nhiên.\r\n- Nhập khẩu chính thức, có giấy tờ, chứng nhận ORGANIC MỸ, ÚC. ', 'Úc', 160, 5, 'https://product.hstatic.net/200000423303/product/ba-chi-bo-obe_5f33606b744e49bb91eb662ed3ef7b3c_grande.png', 4),
+(23, 'Ba chỉ bò Obe hữu cơ', 225000, 'vỉ 300G', 'Nếu cuối tuần muốn đổi gió hoặc bạn là một người sành ăn thì không nên bỏ qua thịt bò hữu cơ OBE nhé! \r\n- 100% Bò OBE không sử dụng thuốc kháng sinh, hóc môn tăng trưởng.\r\n- Giống bò chất lượng ngon nhất, không biến đổi gene, không sử dụng các chất kích thích.\r\n- Bò ăn mềm, ngọt, thơm, ngậy béo....ĐẬM ĐÀ một cách tự nhiên.\r\n- Nhập khẩu chính thức, có giấy tờ, chứng nhận ORGANIC MỸ, ÚC. ', 'Úc', 165, 0, 'https://product.hstatic.net/200000423303/product/ba-chi-bo-obe_5f33606b744e49bb91eb662ed3ef7b3c_grande.png', 4),
 (24, 'Ba rọi rút sườn heo organic', 197500, '500G', NULL, 'Việt Nam', 95, 12, 'https://product.hstatic.net/200000423303/product/ba_roi_rut_suon_heo_huu_co_eef9b174de464c9ba735ee4c2126c8fa_grande.jpg', 4),
 (25, 'Bắp bò hữu cơ obe - obe shin', 255000, '300G', 'Thịt bò Obe organic của Úc chuẩn hữu cơ quốc tế: \r\n- 100% Bò OBE được nuôi cỏ tự nhiên.\r\n- 100% Bò OBE không sử dụng thức ăn công nghiệp.\r\n- 100% Bò OBE không sử dụng thuốc kháng sinh, hóc môn tăng trưởng.\r\n- Giống bò chất lượng ngon nhất, không biến đổi gene, không sử dụng các chất kích thích. - Bò ăn mềm, ngọt, thơm, ngậy béo....ĐẬM ĐÀ một cách tự nhiên.\r\n- Nhập khẩu chính thức, có giấy tờ, chứng nhận ORGANIC MỸ, ÚC.', 'Úc', 76, 24, 'https://product.hstatic.net/200000423303/product/bap-bo-obe-huu-co_d5b0d23c4939402ba43e978a01bbd7da_grande.png', 4),
 (26, 'Đuôi heo hữu cơ', 102000, '300G', 'Đuôi heo có chứa nhiều chất dinh dưỡng có ích như: protein 26,4%, lipid 22,7%, glucid 4%, nhiều chất khoáng vi lượng như can-xi, photpho, sắt... Chất protein của đuôi động vật (chủ yếu là ở da) gồm nhiều chất hợp thành như: collagen, elastin, keratin, albumin, globulin...\r\nTheo Đông y, đuôi heo có tác dụng bồi bổ thận tinh, ích não tủy, bổ âm, làm mạnh tỳ vị, làm mạnh xương sống và thất lưng, tăng cường chức năng hoạt động của da, giúp phát triển cơ bắp và thông huyết mạch, có ích cho người bị phong thấp, đau nhức tay chân, đau lưng mỏi gối, đau các khớp xương. Thường dùng trong các trường hợp: thận suy, tinh kém, đau lưng, đau xương sống, cổ lưng cứng đờ khó cúi ngửa, rối loạn tâm thần, động kinh, suy nhược thần kinh, da bị lão hóa. Đuôi heo có thể được chế biến thành nhiều món ngon & bổ dưỡng như: canh đuôi heo hầm đậu phộng, canh đuôi heo & bí đỏ, soup cà rốt khoai tây, đuôi heo chiên giòn...', 'Việt Nam', 24, 16, 'https://product.hstatic.net/200000423303/product/duoi-heo-huu-co_c21cb690881d4ce481e512d403a8a8d1_grande.jpg', 4),
@@ -711,7 +732,10 @@ INSERT INTO `user_account` (`id`, `username`, `password`, `fullname`, `sex`, `Do
 (4, 'phuck21', 'phuc1357', 'Huỳnh Nguyên Phúc', 'Nam', '2003-02-28', '0909123456', 'phuchuynh.k21@hcmut.edu.vn', 'Ký túc xá khu A', 'https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg'),
 (5, 'thangduong.k21', 'duongthang2468', 'Dương Phúc Thắng', 'Nam', '2003-04-30', '0908987654', 'thangduong2003@gmail.com', 'Ký túc xá khu A', 'https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg'),
 (30, 'khoanda', '$2y$10$L5gYTF1I.yH0K4u8ZyQMhehAfO9UUkBiDCF/S3es7v1.3nPTHYa4S', 'Nguyễn Đặng Anh Hồng', 'Nam', '2023-04-18', '0926878567', 'khoameliodasu@gmail.com', 'KTX Khu A ĐHQG HCM', 'img/avatar/doraemon.png'),
-(32, 'khoandaabc', '$2y$10$QC5XuzIa32rwARsnQURrd.0wTXXckdAOX.Vf1QQ77kZD0hr6MpRTW', 'Nguyễn Đặng Anh Khoa', 'Nam', '2002-04-10', '0962646979', 'khoa.nguyenakaivn@hcmut.edu.vn', '175 Trương Định, Phường 9, Quận 3, TPHCM', 'https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg');
+(33, 'khoanguyenakai', '$2y$10$ZrmYnEreqxChL.tzXi8rZ.Eo7Kd3ni00luNCu2BVZd6H0O9p1xo3W', 'Khoa Nguyen Dang Anh', 'Nam', '2022-12-04', '0962646979', 'khoa.nguyenakaivn@hcmut.edu.vn', 'Phòng 25.16, Bcons Garden, Phố Lý Thường Kiệt, Phường Dĩ An, Dĩ An, Bình Dương', 'https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg'),
+(36, 'khoand', '$2y$10$8k8N23BtRsut7tJ8RFi45uhRX/bed3bNGQg4g8PLx4L1VsHbBoHtu', 'Nguyễn Đặng Anh Khoa', 'Nam', '2023-04-25', '0962646979', 'khoa.nguyenakaivn@hcmut.edu.vn', 'Chung cư Bcons Miền Đông, 69 Tân Lập', 'img/avatar/doraemon.png'),
+(38, 'khoanew', '$2y$10$HodgAiH3Xvjk/sjzNa.ye.Vwgcg9xNu8o9WIMky4bAksdqIeVfkZK', 'Nguyễn Đặng Anh Khoa', 'Nam', '2020-06-07', '0962646979', 'khoa.nguyenakaivn@hcmut.edu.vn', 'Chung cư Bcons Miền Đông, 69 Tân Lập', 'https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg'),
+(39, 'ltwnhom1', '$2y$10$O5Wx2bunUPtj/SKtz4Ykze/fsRLcGwXbq.VO6hXmC0BeRm/WolgoK', 'Nguyễn Đặng Anh Khoa', 'Nam', '2023-04-20', '0962646979', 'khoa.nguyenakaivn@hcmut.edu.vn', 'Chung cư Bcons Miền Đông, 69 Tân Lập', 'https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg');
 
 --
 -- Bẫy `user_account`
@@ -825,7 +849,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT cho bảng `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT cho bảng `products`
@@ -837,7 +861,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT cho bảng `user_account`
 --
 ALTER TABLE `user_account`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
